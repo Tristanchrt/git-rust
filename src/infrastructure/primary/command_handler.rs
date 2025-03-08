@@ -24,7 +24,7 @@ impl COMMAND {
     fn commit_commands() -> Option<COMMAND> {
         Some(COMMAND::COMMIT(|args| {
             // TODO find a better way
-            let repo: Box<dyn CommitsRepository> = Box::new(DBCommitsRepository);
+            let repo: Box<dyn CommitsRepository> = Box::new(DBCommitsRepository::new("db/commits.txt".to_string()));
             let service = CommitsApplicationService::new(repo);
 
             let commit = service.save(args);

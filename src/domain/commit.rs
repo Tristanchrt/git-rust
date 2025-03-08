@@ -19,6 +19,10 @@ impl Commit {
         }
     }
 
+    pub fn to_string(&self) -> String {
+        format!("{} {} {}", self.id, self.parent_id, self.message)
+    }
+
     pub fn id(&self) -> &String {
         &self.id
     }
