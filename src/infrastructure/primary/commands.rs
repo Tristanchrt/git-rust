@@ -1,5 +1,5 @@
 use std::env;
-use crate::domain::command_handler::COMMAND;
+use crate::infrastructure::primary::command_handler::COMMAND;
 
 pub fn cli_commands() {
     let args: Vec<String> = env::args().collect();
