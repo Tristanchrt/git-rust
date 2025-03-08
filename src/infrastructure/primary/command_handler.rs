@@ -27,6 +27,7 @@ impl COMMAND {
             let repo: Box<dyn CommitsRepository> = Box::new(DBCommitsRepository::new("db/commits.txt".to_string()));
             let service = CommitsApplicationService::new(repo);
 
+            // TODO
             let commit = service.save(args);
             return format!("Committing changes {:?}", commit)
         }))

@@ -1,5 +1,9 @@
 use chrono::NaiveDateTime;
 
+#[derive(Debug)]
+pub struct CommitToCreate {
+    message: String,
+}
 
 #[derive(Debug)]
 pub struct Commit {

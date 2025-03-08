@@ -1,4 +1,4 @@
-use crate::domain::commit::Commit;
+use crate::domain::commit::{Commit, CommitToCreate};
 use crate::domain::commit_handler::CommitHandler;
 use crate::domain::commits_repository::CommitsRepository;
 use crate::infrastructure::primary::command_handler::ArgsCLI;
@@ -13,7 +13,9 @@ impl CommitsApplicationService {
         Self { db_repository }
     }
 
-    pub fn save(&self, values: ArgsCLI) -> Commit {
+    pub fn save(&self, values: CommitToCreate) -> Commit {
+        // TODO handle parent_id from repository
+
         let commit = CommitHandler::create_commit(values);
         self.db_repository.save(&commit);
         commit
