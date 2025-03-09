@@ -1,7 +1,6 @@
 use crate::domain::commit::{Commit, CommitToCreate};
 use crate::domain::commit_handler::CommitHandler;
 use crate::domain::commits_repository::CommitsRepository;
-use crate::infrastructure::primary::command_handler::ArgsCLI;
 
 pub struct CommitsApplicationService {
     db_repository: Box<dyn CommitsRepository>,

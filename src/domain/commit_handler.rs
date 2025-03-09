@@ -1,17 +1,12 @@
-use crate::domain::commit::Commit;
-use crate::infrastructure::primary::command_handler::ArgsCLI;
+use crate::domain::commit::{Commit, CommitToCreate};
 
 pub struct CommitHandler {
     create_commit: String
 }
 
 impl CommitHandler {
-    pub fn create_commit(args: ArgsCLI) -> Commit {
-        Commit::new(
-            "1".to_string(),
-            "0".to_string(),
-            "Init commit".to_string(),
-            chrono::Local::now().naive_local()
-        )
+    pub fn create_commit(commit: CommitToCreate) -> Commit {
+        let parent_id = "0".to_string();
+        CommitToCreate::create(commit, parent_id)
     }
 }

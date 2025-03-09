@@ -22,6 +22,7 @@ const TEST_DB_PATH: &str = "tests/db/commits_test.txt";
 
 #[cfg(test)]
 mod commit_test {
+    use uuid::Uuid;
     use git_rust::domain::commit::Commit;
     use git_rust::domain::commits_repository::CommitsRepository;
     use git_rust::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
@@ -32,7 +33,7 @@ mod commit_test {
     fn test_panic_when_file_not_found() {
         let db_repository = DBCommitsRepository::new("toto".to_string());
         let commit = Commit::new(
-            "1".to_string(),
+            Uuid::new_v4(),
             "0".to_string(),
             "Init commit".to_string(),
             chrono::Local::now().naive_local()
@@ -44,7 +45,7 @@ mod commit_test {
     fn test_save_commit() {
         let db_repository = DBCommitsRepository::new(TEST_DB_PATH.to_string());
         let commit = Commit::new(
-            "1".to_string(),
+            Uuid::new_v4(),
             "0".to_string(),
             "Init commit".to_string(),
             chrono::Local::now().naive_local()
