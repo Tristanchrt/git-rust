@@ -17,7 +17,7 @@ mod commit_test {
     fn test_create_commit() {
         let result = CommitHandler::create_commit(CommitToCreate::new("Init commit".to_string()));
         let commit =  Commit::new(
-            Uuid::new_v4(),
+            Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a8").unwrap(),
             "0".to_string(),
             "Init commit".to_string(),
             chrono::Local::now().naive_local()

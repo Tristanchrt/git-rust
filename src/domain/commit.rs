@@ -24,7 +24,7 @@ impl CommitToCreate {
             id: Uuid::new_v4(),
             parent_id,
             message: commit.message,
-            timestamp: chrono::Local::now().naive_local()
+            created_at: chrono::Local::now().naive_local()
         }
     }
 }
@@ -34,21 +34,17 @@ pub struct Commit {
     id: Uuid,
     parent_id: String,
     message: String,
-    timestamp: NaiveDateTime
+    created_at: NaiveDateTime
 }
 
 impl Commit {
-    pub fn new(id: Uuid, parent_id: String, message: String, timestamp: NaiveDateTime) -> Self {
+    pub fn new(id: Uuid, parent_id: String, message: String, created_at: NaiveDateTime) -> Self {
         Self {
             id,
             parent_id,
             message,
-            timestamp
+            created_at
         }
-    }
-
-    pub fn to_string(&self) -> String {
-        format!("{} {} {}", self.id, self.parent_id, self.message)
     }
 
     pub fn id(&self) -> &Uuid {
@@ -61,5 +57,9 @@ impl Commit {
 
     pub fn message(&self) -> &String {
         &self.message
+    }
+
+    pub fn created_at(&self) -> &NaiveDateTime {
+        &self.created_at
     }
 }

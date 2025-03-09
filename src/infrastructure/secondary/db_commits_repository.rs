@@ -2,6 +2,7 @@ use std::fs::OpenOptions;
 use crate::domain::commit::Commit;
 use crate::domain::commits_repository::CommitsRepository;
 use std::io::Write;
+use crate::infrastructure::secondary::commit_entity::CommitEntity;
 
 pub struct DBCommitsRepository {
     path: String
@@ -19,7 +20,7 @@ impl DBCommitsRepository {
             .open(&self.path)
             .expect("Couldn't open file");
 
-        if let Err(e) = writeln!(file, "{}", commit.to_string()) {
+        if let Err(e) = writeln!(file, "{}", CommitEntity::from(commit).to_string()) {
             panic!("Couldn't save commit: {}", e);
         }
     }
