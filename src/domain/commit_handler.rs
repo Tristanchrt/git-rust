@@ -1,3 +1,4 @@
+use uuid::Uuid;
 use crate::domain::commit::{Commit, CommitToCreate};
 
 pub struct CommitHandler {
@@ -5,8 +6,7 @@ pub struct CommitHandler {
 }
 
 impl CommitHandler {
-    pub fn create_commit(commit: CommitToCreate) -> Commit {
-        let parent_id = "0".to_string();
+    pub fn create_commit(commit: CommitToCreate, parent_id: Uuid) -> Commit {
         CommitToCreate::create(commit, parent_id)
     }
 }

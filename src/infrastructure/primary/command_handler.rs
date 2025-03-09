@@ -34,6 +34,7 @@ impl COMMAND {
 
             let cli_commit = CliCommitToCreate::new(args[3].clone());
             let commit = service.save(cli_commit.to_domain());
+            // TODO add CliCommit
             return format!("Committing changes {:?}", commit)
         }))
     }

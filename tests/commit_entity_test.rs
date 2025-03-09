@@ -9,7 +9,7 @@ mod cli_commit_test {
     fn test_should_convert_from_and_to_domain() {
         let commit =  Commit::new(
             Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a8").unwrap(),
-            "0".to_string(),
+            Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap(),
             "Init commit".to_string(),
             chrono::Local::now().naive_local()
         );
@@ -18,19 +18,19 @@ mod cli_commit_test {
 
         assert_eq!(commit_from_entity.id().to_string(), "936da01f-9abd-4d9d-80c7-02af85c822a8");
         assert_eq!(commit_from_entity.message(), "Init commit");
-        assert_eq!(commit_from_entity.parent_id(), "0");
+        assert_eq!(commit_from_entity.parent_id().to_string(), Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap().to_string());
     }
 
     #[test]
     fn test_should_convert_to_string() {
         let commit = Commit::new(
             Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a8").unwrap(),
-            "0".to_string(),
+            Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap(),
             "Init commit".to_string(),
             NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap()
         );
         let commit_entity = CommitEntity::from(&commit);
 
-        assert_eq!(commit_entity.to_string(), "936da01f-9abd-4d9d-80c7-02af85c822a8,0,Init commit,2023-01-01 12:00:00");
+        assert_eq!(commit_entity.to_string(), "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00");
     }
 }
