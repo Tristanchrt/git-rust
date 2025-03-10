@@ -1,7 +1,7 @@
 use std::fs::OpenOptions;
 use crate::domain::commit::Commit;
 use crate::domain::commits_repository::CommitsRepository;
-use std::io::{BufRead, BufReader, Write};
+use std::io::Write;
 use crate::infrastructure::secondary::commit_entity::CommitEntity;
 
 pub struct DBCommitsRepository {
@@ -26,15 +26,12 @@ impl DBCommitsRepository {
     }
 
     fn get_last_commit(&self) -> Option<Commit> {
-        // TODO
-        // let file = OpenOptions::new().read(true).open(&self.path).ok()?;
-        //
-        // let lines: Vec<String> = BufReader::new(file)
-        //     .lines().last().iter().last().map(|line| line.to_string())?;
-        //
-        // let last_line = lines.last();
-        let last_line = "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,totoot,2025-03-09 11:46:12.170356";
-        Some(CommitEntity::from_string(last_line).to_domain())
+        let file = std::fs::read_to_string(&self.path).unwrap();
+
+        match file.lines().last() {
+            Some(last_line) => Some(CommitEntity::from_string(last_line).to_domain()),
+            None => None
+        }
     }
 }
 

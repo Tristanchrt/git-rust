@@ -28,7 +28,10 @@ impl CommitToCreate {
             id: Uuid::new_v4(),
             parent_id,
             message: commit.message,
-            created_at: chrono::Local::now().naive_local()
+            created_at: NaiveDateTime::parse_from_str(
+                &chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
+                "%Y-%m-%d %H:%M:%S"
+            ).unwrap(),
         }
     }
 }

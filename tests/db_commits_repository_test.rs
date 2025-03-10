@@ -1,5 +1,5 @@
 use std::fs::{File, OpenOptions};
-use std::io::{BufRead, Read};
+use std::io::BufRead;
 use chrono::NaiveDateTime;
 use uuid::Uuid;
 use git_rust::domain::commit::Commit;
@@ -68,5 +68,12 @@ mod commit_test {
         assert_eq!(last_commit.created_at(), commit.created_at());
 
         clean_file(TEST_DB_PATH.to_string());
+    }
+
+    #[test]
+    fn test_get_last_commit_find_none() {
+        let db_repository = DBCommitsRepository::new(TEST_DB_PATH.to_string());
+        let last_commit = db_repository.get_last_commit();
+        assert!(last_commit.is_none());
     }
 }

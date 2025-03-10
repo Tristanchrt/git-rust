@@ -4,19 +4,25 @@ use crate::domain::commit::Commit;
 
 pub struct CommitEntity {
     id: Uuid,
-    message: String,
     parent_id: Uuid,
+    message: String,
     created_at: NaiveDateTime,
 }
 
 impl CommitEntity {
     pub fn from_string(line: &str) -> CommitEntity {
+        let line: Vec<&str> = line.split(",").collect();
+
         CommitEntity {
-            id: Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a8").unwrap(),
-            message: "Init commit".to_string(),
-            parent_id: Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap(),
-            created_at: NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap()
+            id: Uuid::parse_str(line.get(0).unwrap()).unwrap(),
+            parent_id: Uuid::parse_str(line.get(1).unwrap()).unwrap(),
+            message: line.get(2).unwrap().to_string(),
+            created_at: NaiveDateTime::parse_from_str(line.get(3).unwrap(), "%Y-%m-%d %H:%M:%S").unwrap()
         }
+    }
+
+    pub fn to_string(&self) -> String {
+        format!("{},{},{},{}", self.id, self.parent_id, self.message, self.created_at)
     }
 }
 
@@ -24,8 +30,8 @@ impl CommitEntity {
     pub fn from(commit: &Commit) -> Self {
         Self {
             id: commit.id().clone(),
-            message: commit.message().clone(),
             parent_id: commit.parent_id().clone(),
+            message: commit.message().clone(),
             created_at: commit.created_at().clone()
         }
     }
@@ -34,20 +40,16 @@ impl CommitEntity {
         Commit::new(self.id.clone(), self.parent_id.clone(), self.message.clone(), self.created_at.clone())
     }
 
-    pub fn to_string(&self) -> String {
-        format!("{},{},{},{}", self.id, self.parent_id, self.message, self.created_at)
-    }
-
     pub fn id(&self) -> &Uuid {
         &self.id
     }
 
-    pub fn message(&self) -> &String {
-        &self.message
-    }
-
     pub fn parent_id(&self) -> &Uuid {
         &self.parent_id
+    }
+
+    pub fn message(&self) -> &String {
+        &self.message
     }
 
     pub fn created_at(&self) -> &NaiveDateTime {
