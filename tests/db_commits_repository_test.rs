@@ -41,6 +41,8 @@ mod commit_test {
     #[test]
     #[should_panic(expected = "Couldn't open file")]
     fn test_panic_when_file_not_found() {
+        clean_file(TEST_DB_PATH.to_string());
+
         let db_repository = DBCommitsRepository::new("toto".to_string());
         let commit = sample_commit();
         db_repository.save(&commit);
@@ -48,20 +50,26 @@ mod commit_test {
 
     #[test]
     fn test_save_commit() {
+        clean_file(TEST_DB_PATH.to_string());
+
         let db_repository = DBCommitsRepository::new(TEST_DB_PATH.to_string());
         let commit = sample_commit();
         db_repository.save(&commit);
         assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00");
+
         clean_file(TEST_DB_PATH.to_string());
     }
 
     #[test]
     fn test_get_last_commit() {
+        clean_file(TEST_DB_PATH.to_string());
+
         let db_repository = DBCommitsRepository::new(TEST_DB_PATH.to_string());
         let commit = sample_commit();
         db_repository.save(&commit);
         let last_commit = db_repository.get_last_commit().unwrap();
 
+        // TODO maybe use #[derive(PartialEq)] or impl PartialEq for Person
         assert_eq!(last_commit.id(), commit.id());
         assert_eq!(last_commit.message(), commit.message());
         assert_eq!(last_commit.parent_id(), commit.parent_id());
@@ -72,8 +80,11 @@ mod commit_test {
 
     #[test]
     fn test_get_last_commit_find_none() {
+        clean_file(TEST_DB_PATH.to_string());
+
         let db_repository = DBCommitsRepository::new(TEST_DB_PATH.to_string());
         let last_commit = db_repository.get_last_commit();
+
         assert!(last_commit.is_none());
     }
 }
