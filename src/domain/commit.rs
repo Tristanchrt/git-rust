@@ -1,5 +1,6 @@
 use chrono::NaiveDateTime;
 use uuid::Uuid;
+use crate::infrastructure::secondary::commit_entity::CommitEntity;
 
 #[derive(Debug)]
 pub struct CommitToCreate {
@@ -42,6 +43,15 @@ pub struct Commit {
     parent_id: Uuid,
     message: String,
     created_at: NaiveDateTime
+}
+
+impl PartialEq for Commit {
+    fn eq(&self, other: &Self) -> bool {
+        self.id.to_string() == other.id.to_string()
+            && self.parent_id.to_string() == other.parent_id.to_string()
+            && self.created_at == other.created_at
+            && self.message == other.message
+    }
 }
 
 impl Commit {

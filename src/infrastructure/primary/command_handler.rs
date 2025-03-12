@@ -1,6 +1,6 @@
 use crate::applications::commits_application_service::CommitsApplicationService;
 use crate::domain::commits_repository::CommitsRepository;
-use crate::infrastructure::primary::cli_commit::CliCommitToCreate;
+use crate::infrastructure::primary::cli_commit::{CliCommit, CliCommitToCreate};
 use crate::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
 
 pub type ArgsCLI = Vec<String>;
@@ -34,8 +34,7 @@ impl COMMAND {
 
             let cli_commit = CliCommitToCreate::new(args[3].clone());
             let commit = service.save(cli_commit.to_domain());
-            // TODO add CliCommit
-            return format!("Committing changes {:?}", commit)
+            return format!("Committing changes {:?}", CliCommit::from(commit).to_display())
         }))
     }
 }

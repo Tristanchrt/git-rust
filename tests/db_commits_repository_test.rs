@@ -59,11 +59,7 @@ mod commit_test {
         db_repository.save(&commit);
         let last_commit = db_repository.get_last_commit().unwrap();
 
-        // TODO maybe use #[derive(PartialEq)] or impl PartialEq for Person
-        assert_eq!(last_commit.id(), commit.id());
-        assert_eq!(last_commit.message(), commit.message());
-        assert_eq!(last_commit.parent_id(), commit.parent_id());
-        assert_eq!(last_commit.created_at(), commit.created_at());
+        assert_eq!(last_commit, commit);
 
         clean_file(TEST_DB_PATH.to_string());
     }

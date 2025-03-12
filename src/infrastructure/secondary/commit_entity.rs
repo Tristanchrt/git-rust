@@ -26,6 +26,15 @@ impl CommitEntity {
     }
 }
 
+impl PartialEq for CommitEntity {
+    fn eq(&self, other: &Self) -> bool {
+        self.id.to_string() == other.id.to_string()
+            && self.parent_id.to_string() == other.parent_id.to_string()
+            && self.created_at == other.created_at
+            && self.message == other.message
+    }
+}
+
 impl CommitEntity {
     pub fn from(commit: &Commit) -> Self {
         Self {
