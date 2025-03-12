@@ -1,8 +1,6 @@
 use std::fs::{File, OpenOptions};
 use std::io::BufRead;
-use chrono::NaiveDateTime;
-use uuid::Uuid;
-use git_rust::domain::commit::Commit;
+mod commit_fixtures;
 
 pub fn read_file_line(path: String, index: u16) -> String {
     File::open(path)
@@ -21,21 +19,13 @@ pub fn clean_file(path: String) {
         .unwrap();
 }
 
-fn sample_commit() -> Commit {
-     Commit::new(
-        Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a8").unwrap(),
-        Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap(),
-        "Init commit".to_string(),
-        NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap()
-    )
-}
-
 const TEST_DB_PATH: &str = "tests/db/commits_test.txt";
 
 #[cfg(test)]
 mod commit_test {
     use git_rust::domain::commits_repository::CommitsRepository;
     use git_rust::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
+    use crate::commit_fixtures::sample_commit;
     use super::*;
 
     #[test]
