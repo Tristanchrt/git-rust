@@ -16,10 +16,10 @@ pub struct CliCommit {
 impl CliCommit {
     pub fn from(commit: Commit) -> Self {
         Self {
-            id: commit.id().clone(),
-            parent_id: commit.parent_id().clone(),
+            id: commit.id(),
+            parent_id: commit.parent_id(),
             message: commit.message().clone(),
-            created_at: commit.created_at().clone()
+            created_at: commit.created_at()
         }
     }
 

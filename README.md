@@ -1,5 +1,11 @@
 # RustGit Project
 
+# TODO
+
+- [ ] Implement `git checkout` and `git branch`.
+- [ ] Add git log
+- [ ] Storage of Git Files and Objects 
+
 ### Main Features to Implement
 
 #### 1. Storage of Git Files and Objects

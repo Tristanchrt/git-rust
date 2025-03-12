@@ -4,7 +4,6 @@ mod commit_fixtures;
 mod cli_commit_test {
     use chrono::NaiveDateTime;
     use uuid::Uuid;
-    use git_rust::domain::commit::Commit;
     use git_rust::infrastructure::secondary::commit_entity::CommitEntity;
     use crate::commit_fixtures::sample_commit;
 

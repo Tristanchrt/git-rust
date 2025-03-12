@@ -1,6 +1,5 @@
 use chrono::NaiveDateTime;
 use uuid::Uuid;
-use crate::infrastructure::secondary::commit_entity::CommitEntity;
 
 #[derive(Debug)]
 pub struct CommitToCreate {
@@ -64,19 +63,19 @@ impl Commit {
         }
     }
 
-    pub fn id(&self) -> &Uuid {
-        &self.id
+    pub fn id(&self) -> Uuid {
+        self.id
     }
 
-    pub fn parent_id(&self) -> &Uuid {
-        &self.parent_id
+    pub fn parent_id(&self) -> Uuid {
+        self.parent_id
     }
 
     pub fn message(&self) -> &String {
         &self.message
     }
 
-    pub fn created_at(&self) -> &NaiveDateTime {
-        &self.created_at
+    pub fn created_at(&self) -> NaiveDateTime {
+        self.created_at
     }
 }
