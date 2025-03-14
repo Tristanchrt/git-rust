@@ -1,24 +1,8 @@
-use std::fs::{File, OpenOptions};
 use std::io::BufRead;
 mod commit_fixtures;
+mod file_shared;
 
-pub fn read_file_line(path: String, index: u16) -> String {
-    File::open(path)
-        .and_then(|file| {
-            let lines = std::io::BufReader::new(file).lines();
-            lines.skip(index as usize).next().unwrap()
-        })
-        .unwrap()
-}
-
-pub fn clean_file(path: String) {
-    OpenOptions::new()
-        .write(true)
-        .truncate(true)
-        .open(path)
-        .unwrap();
-}
-
+// TODO configuration file
 const TEST_DB_PATH: &str = "tests/db/commits_test.txt";
 
 #[cfg(test)]
@@ -26,6 +10,7 @@ mod commit_test {
     use git_rust::domain::commits_repository::CommitsRepository;
     use git_rust::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
     use crate::commit_fixtures::sample_commit;
+    use crate::file_shared::{clean_file, read_file_line};
     use super::*;
 
     #[test]

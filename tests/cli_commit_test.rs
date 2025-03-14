@@ -13,7 +13,7 @@ mod cli_commit_test {
     }
 
     #[test]
-    fn test_should_transform_() {
+    fn test_should_display_cli_commit() {
         let commit = sample_commit();
         let cli_commit = CliCommit::from(commit);
         assert_eq!(cli_commit.to_display(), "936da01f-9abd-4d9d-80c7-02af85c822a8 | 936da01f-9abd-4d9d-80c7-02af85c822a7 | 2023-01-01 12:00:00 | Init commit");

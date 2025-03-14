@@ -1,6 +1,6 @@
 use chrono::NaiveDateTime;
 use uuid::Uuid;
-use git_rust::domain::commit::Commit;
+use git_rust::domain::commit::{Commit, CommitToCreate};
 
 pub fn sample_commit() -> Commit {
     Commit::new(
@@ -9,4 +9,8 @@ pub fn sample_commit() -> Commit {
         "Init commit".to_string(),
         NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap()
     )
+}
+
+pub fn commit_to_create() -> CommitToCreate {
+    CommitToCreate::new("Init commit".to_string())
 }

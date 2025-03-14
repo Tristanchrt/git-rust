@@ -12,13 +12,13 @@ impl CommitsApplicationService {
         Self { db_repository }
     }
 
-    pub fn save(&self, values: CommitToCreate) -> Commit {
+    pub fn save(&self, to_create: CommitToCreate) -> Commit {
         let parent_commit_id = self.db_repository
             .get_last_commit()
             .map(|commit| commit.id().to_owned())
             .unwrap_or_else(|| CommitToCreate::default_parent_id());
 
-        let commit = CommitHandler::create_commit(values, parent_commit_id);
+        let commit = CommitHandler::create_commit(to_create, parent_commit_id);
         self.db_repository.save(&commit);
 
         commit

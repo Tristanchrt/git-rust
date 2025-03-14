@@ -5,6 +5,6 @@ pub struct CommitHandler;
 
 impl CommitHandler {
     pub fn create_commit(commit: CommitToCreate, parent_id: Uuid) -> Commit {
-        CommitToCreate::create(commit, parent_id)
+        commit.create(parent_id)
     }
 }

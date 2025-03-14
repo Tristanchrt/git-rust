@@ -8,6 +8,7 @@ type CommandHandler = fn(args: ArgsCLI) -> String;
 
 pub enum COMMAND {
     COMMIT(CommandHandler),
+    BRANCH(CommandHandler),
 }
 
 impl COMMAND {
@@ -17,6 +18,9 @@ impl COMMAND {
         match input {
             "commit" => {
                 Self::commit_commands()
+            },
+            "branch" => {
+                Self::branch_commands()
             },
             _ => None,
         }
@@ -35,6 +39,23 @@ impl COMMAND {
             let cli_commit = CliCommitToCreate::new(args[3].clone());
             let commit = service.save(cli_commit.to_domain());
             return format!("Committing changes {:?}", CliCommit::from(commit).to_display())
+        }))
+    }
+
+    fn branch_commands() -> Option<COMMAND> {
+        Some(COMMAND::BRANCH(|args| {
+            todo!()
+            // // TODO find a better way
+            // let repo: Box<dyn CommitsRepository> = Box::new(DBCommitsRepository::new("db/commits.txt".to_string()));
+            // let service = CommitsApplicationService::new(repo);
+            //
+            // if args.len() < 4 {
+            //     return "No message provided".to_string();
+            // }
+            //
+            // let cli_commit = CliCommitToCreate::new(args[3].clone());
+            // let commit = service.save(cli_commit.to_domain());
+            // return format!("Committing changes {:?}", CliCommit::from(commit).to_display())
         }))
     }
 }

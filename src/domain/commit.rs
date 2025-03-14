@@ -23,16 +23,20 @@ impl CommitToCreate {
 }
 
 impl CommitToCreate {
-    pub fn create(commit: CommitToCreate, parent_id: Uuid) -> Commit {
+    pub fn create(&self, parent_id: Uuid) -> Commit {
         Commit {
             id: Uuid::new_v4(),
             parent_id,
-            message: commit.message,
-            created_at: NaiveDateTime::parse_from_str(
-                &chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-                "%Y-%m-%d %H:%M:%S"
-            ).unwrap(),
+            message: self.message.clone(),
+            created_at: Self::now(),
         }
+    }
+
+    fn now() -> NaiveDateTime {
+        NaiveDateTime::parse_from_str(
+            &chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
+            "%Y-%m-%d %H:%M:%S"
+        ).unwrap()
     }
 }
 

@@ -10,5 +10,6 @@ pub fn cli_commands() {
         None => {
             println!("No valid command provided");
         }
+        _ => {}
     }
 }
