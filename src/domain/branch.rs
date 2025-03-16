@@ -12,6 +12,10 @@ impl BranchToCreate {
         }
     }
 
+    pub fn name(&self) -> String {
+        self.name.clone()
+    }
+
     pub fn create(&self) -> Branch {
         Branch::new(self.name.clone(), Self::now())
     }

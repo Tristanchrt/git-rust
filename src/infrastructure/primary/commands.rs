@@ -7,9 +7,11 @@ pub fn cli_commands() {
         Some(COMMAND::COMMIT(data)) => {
             println!("Committing changes {:?}", data(args));
         }
+        Some(COMMAND::BRANCH(data)) => {
+            println!("Branch created {:?}", data(args));
+        },
         None => {
             println!("No valid command provided");
         }
-        _ => {}
     }
 }

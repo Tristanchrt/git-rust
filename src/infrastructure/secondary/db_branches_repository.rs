@@ -3,14 +3,12 @@ use crate::domain::branch::Branch;
 use crate::domain::branches_repository::BranchesRepository;
 use crate::infrastructure::secondary::branch_entity::BranchEntity;
 use std::io::Write;
-use crate::infrastructure::secondary::commit_entity::CommitEntity;
 
 pub struct DBBranchesRepository {
     path: String
 }
-
-
 impl DBBranchesRepository {
+
     pub fn new(path: String) -> Self {
         Self { path }
     }
