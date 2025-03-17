@@ -4,8 +4,7 @@ use crate::domain::branches_repository::BranchesRepository;
 use crate::domain::current_branch_repository::CurrentBranchRepository;
 
 pub struct BranchesApplicationService {
-    branches_repository: Box<dyn BranchesRepository>,
-    current_branch_repository: Box<dyn CurrentBranchRepository>,
+    branch_handler: BranchHandler
 }
 
 impl BranchesApplicationService {
@@ -13,19 +12,15 @@ impl BranchesApplicationService {
     pub fn new(branches_repository: Box<dyn BranchesRepository>,
                current_branch_repository: Box<dyn CurrentBranchRepository>) -> Self {
         Self {
-            branches_repository,
-            current_branch_repository
+            branch_handler: BranchHandler::new(branches_repository, current_branch_repository),
         }
     }
 
-    pub(crate) fn checkout(&self, branch_name: String) -> Branch {
-        todo!()
+    pub fn checkout(&self, branch_name: String) -> Branch {
+        self.branch_handler.checkout(branch_name)
     }
 
     pub fn save(&self, to_create: BranchToCreate) -> Branch {
-        let branch = BranchHandler::create_branch(to_create);
-        self.branches_repository.save(&branch);
-
-        branch
+        self.branch_handler.create_branch(to_create)
     }
 }

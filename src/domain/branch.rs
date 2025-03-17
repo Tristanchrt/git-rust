@@ -28,6 +28,7 @@ impl BranchToCreate {
     }
 }
 
+#[derive(Debug)]
 pub struct Branch {
     name: String,
     created_at: NaiveDateTime

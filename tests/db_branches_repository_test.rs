@@ -6,7 +6,6 @@ const TEST_DB_PATH: &str = "tests/db/branches_test.txt";
 
 #[cfg(test)]
 mod commit_test {
-    use git_rust::domain::branch::Branch;
     use git_rust::domain::branches_repository::BranchesRepository;
     use git_rust::infrastructure::secondary::db_branches_repository::DBBranchesRepository;
     use crate::branch_fixtures::sample_branch;
@@ -47,6 +46,19 @@ mod commit_test {
         let branches = db_repository.get_branches();
 
         assert!(sample_branch().eq(branches.get(0).unwrap()));
+
+        clean_file(TEST_DB_PATH.to_string());
+    }
+
+    #[test]
+    fn test_should_get_branch_by_name() {
+        clean_file(TEST_DB_PATH.to_string());
+
+        let db_repository = DBBranchesRepository::new(TEST_DB_PATH.to_string());
+        let branch = sample_branch();
+        db_repository.save(&branch);
+
+        assert!(sample_branch().eq(&db_repository.get_by_name(branch.name()).unwrap()));
 
         clean_file(TEST_DB_PATH.to_string());
     }

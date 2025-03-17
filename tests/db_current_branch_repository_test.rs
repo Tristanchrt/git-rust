@@ -8,7 +8,7 @@ const TEST_DB_PATH: &str = "tests/db/current_branch_test.txt";
 mod current_branch_test {
     use git_rust::domain::current_branch_repository::CurrentBranchRepository;
     use git_rust::infrastructure::secondary::db_current_branch_repository::DBCurrentBranchRepository;
-    use crate::branch_fixtures::sample_branch;
+    use crate::branch_fixtures::{sample_branch, sample_branch_two};
     use crate::file_shared::{clean_file, read_file_line};
     use super::*;
 
@@ -27,10 +27,10 @@ mod current_branch_test {
         clean_file(TEST_DB_PATH.to_string());
 
         let db_repository = DBCurrentBranchRepository::new(TEST_DB_PATH.to_string());
-        let branch = sample_branch();
-        db_repository.save(&branch);
+        db_repository.save(&sample_branch());
+        db_repository.save(&sample_branch_two());
 
-        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "toto,2023-01-01 12:00:00");
+        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "tata,2021-01-01 12:00:00");
 
         clean_file(TEST_DB_PATH.to_string());
     }
@@ -55,11 +55,7 @@ mod current_branch_test {
         clean_file(TEST_DB_PATH.to_string());
 
         let db_repository = DBCurrentBranchRepository::new(TEST_DB_PATH.to_string());
-        let branch = sample_branch();
-
         let current_branch = db_repository.get();
-
         assert!(current_branch.is_none());
-
     }
 }
