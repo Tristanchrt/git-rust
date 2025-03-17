@@ -5,8 +5,7 @@ mod file_shared;
 const TEST_DB_PATH: &str = "tests/db/branches_test.txt";
 
 #[cfg(test)]
-mod commit_test {
-    use git_rust::domain::branch::Branch;
+mod db_branches_repository_test {
     use git_rust::domain::branches_repository::BranchesRepository;
     use git_rust::infrastructure::secondary::db_branches_repository::DBBranchesRepository;
     use crate::branch_fixtures::sample_branch;
@@ -30,7 +29,7 @@ mod commit_test {
         let db_repository = DBBranchesRepository::new(TEST_DB_PATH.to_string());
         let branch = sample_branch();
         db_repository.save(&branch);
-        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "toto,2023-01-01 12:00:00");
+        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "toto,2023-01-01 12:00:00,true");
 
         clean_file(TEST_DB_PATH.to_string());
     }

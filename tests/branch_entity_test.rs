@@ -13,6 +13,7 @@ mod cli_branch_test {
 
         assert_eq!(branch_from_entity.name().to_string(), "toto");
         assert_eq!(branch_from_entity.created_at().to_string(), "2023-01-01 12:00:00");
+        assert_eq!(branch_from_entity.is_current(), true);
     }
 
     #[test]
@@ -20,16 +21,29 @@ mod cli_branch_test {
         let branch = sample_branch();
         let branch_entity = BranchEntity::from(&branch);
 
-        assert_eq!(branch_entity.to_string(), "toto,2023-01-01 12:00:00");
+        assert_eq!(branch_entity.to_string(), "toto,2023-01-01 12:00:00,true");
     }
 
     #[test]
-    fn test_should_convert_from_string() {
-        let line = "toto,2023-01-01 12:00:00";
+    fn test_should_convert_from_string_current() {
+        let line = "toto,2023-01-01 12:00:00,false";
 
         let branch_entity = BranchEntity::from_string(line);
 
         assert_eq!(branch_entity.name().to_string(), "toto");
         assert_eq!(branch_entity.created_at().to_string(), "2023-01-01 12:00:00");
+        assert_eq!(branch_entity.is_current().clone(), false);
     }
+
+    #[test]
+    fn test_should_convert_from_string() {
+        let line = "toto,2023-01-01 12:00:00,true";
+
+        let branch_entity = BranchEntity::from_string(line);
+
+        assert_eq!(branch_entity.name().to_string(), "toto");
+        assert_eq!(branch_entity.created_at().to_string(), "2023-01-01 12:00:00");
+        assert_eq!(branch_entity.is_current().clone(), true);
+    }
+
 }

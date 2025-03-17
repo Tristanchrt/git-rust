@@ -8,10 +8,11 @@ mod branch_test {
 
     #[test]
     fn test_should_create_branch_from_to_create() {
-        let branch_to_create = BranchToCreate::new("toto".to_string());
+        let branch_to_create = BranchToCreate::new("toto".to_string(), false);
         let branch = branch_to_create.create();
 
         assert_eq!(branch.name(), "toto");
+        assert_eq!(branch.is_current(), false);
     }
 
     #[test]
@@ -20,5 +21,6 @@ mod branch_test {
 
         let branch = sample_branch();
         assert_eq!(branch.name(), "toto");
+        assert_eq!(branch.is_current(), true);
     }
 }
