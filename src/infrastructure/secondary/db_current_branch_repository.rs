@@ -1,13 +1,14 @@
 use std::fs::OpenOptions;
 use crate::domain::branch::Branch;
-use crate::domain::branches_repository::BranchesRepository;
+use crate::domain::current_branch_repository::CurrentBranchRepository;
 use crate::infrastructure::secondary::branch_entity::BranchEntity;
 use std::io::Write;
 
-pub struct DBBranchesRepository {
+pub struct DBCurrentBranchRepository {
     path: String
 }
-impl DBBranchesRepository {
+
+impl DBCurrentBranchRepository {
 
     pub fn new(path: String) -> Self {
         Self { path }
@@ -25,20 +26,20 @@ impl DBBranchesRepository {
         }
     }
 
-    pub fn get_branches(&self) -> Vec<Branch> {
+    pub fn get(&self) -> Option<Branch> {
         let file = std::fs::read_to_string(&self.path).unwrap();
 
-        file.lines().map(|line| BranchEntity::from_string(line).to_domain()).collect()
+        file.lines().last().map(|branch| BranchEntity::from_string(branch).to_domain())
     }
 }
 
-impl BranchesRepository for DBBranchesRepository {
+impl CurrentBranchRepository for DBCurrentBranchRepository {
 
     fn save(&self, branch: &Branch) {
-       self.save_to_file(branch)
+        self.save_to_file(branch)
     }
 
-    fn get_branches(&self) -> Vec<Branch> {
-        self.get_branches()
+    fn get(&self) -> Option<Branch> {
+        self.get()
     }
 }

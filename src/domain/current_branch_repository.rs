@@ -1,6 +1,6 @@
 use crate::domain::branch::Branch;
 
-pub trait BranchesRepository {
+pub trait CurrentBranchRepository {
     fn save(&self, branch: &Branch);
-    fn get_branches(&self) -> Vec<Branch>;
+    fn get(&self) -> Option<Branch>;
 }
