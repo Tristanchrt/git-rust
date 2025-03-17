@@ -54,8 +54,7 @@ impl COMMAND {
                 return "No branch name provided".to_string();
             }
 
-            // TODO handle is_current
-            let cli_branch = CliBranchToCreate::new(args[3].clone(), false);
+            let cli_branch = CliBranchToCreate::new(args[3].clone());
             let branch = service.save(cli_branch.to_domain());
             return format!("Branch created {:?}", CliBranch::from(branch).to_display())
         }))

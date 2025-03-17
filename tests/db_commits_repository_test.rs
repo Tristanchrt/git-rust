@@ -6,7 +6,7 @@ mod file_shared;
 const TEST_DB_PATH: &str = "tests/db/commits_test.txt";
 
 #[cfg(test)]
-mod db_commits_repository_test {
+mod commit_test {
     use git_rust::domain::commits_repository::CommitsRepository;
     use git_rust::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
     use crate::commit_fixtures::sample_commit;

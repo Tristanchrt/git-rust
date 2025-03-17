@@ -1,16 +1,14 @@
 use chrono::NaiveDateTime;
 
 pub struct BranchToCreate {
-    name: String,
-    is_current: bool
+    name: String
 }
 
 impl BranchToCreate {
 
-    pub fn new(name: String, is_current: bool) -> BranchToCreate {
+    pub fn new(name: String) -> BranchToCreate {
         Self {
-            name,
-            is_current
+            name
         }
     }
 
@@ -18,11 +16,8 @@ impl BranchToCreate {
         self.name.clone()
     }
 
-    pub fn is_current(&self) -> bool {
-        self.is_current.clone()
-    }
     pub fn create(&self) -> Branch {
-        Branch::new(self.name.clone(), Self::now(), self.is_current)
+        Branch::new(self.name.clone(), Self::now())
     }
 
     fn now() -> NaiveDateTime {
@@ -35,16 +30,14 @@ impl BranchToCreate {
 
 pub struct Branch {
     name: String,
-    created_at: NaiveDateTime,
-    is_current: bool
+    created_at: NaiveDateTime
 }
 
 impl Branch {
-    pub fn new(name: String, created_at: NaiveDateTime, is_current: bool) -> Branch {
+    pub fn new(name: String, created_at: NaiveDateTime) -> Branch {
         Self {
             name,
-            created_at,
-            is_current
+            created_at
         }
     }
 
@@ -55,14 +48,10 @@ impl Branch {
     pub fn created_at(&self) -> NaiveDateTime {
         self.created_at
     }
-
-    pub fn is_current(&self) -> bool {
-        self.is_current.clone()
-    }
 }
 
 impl PartialEq for Branch {
     fn eq(&self, other: &Self) -> bool {
-      self.name == other.name && self.is_current == other.is_current && self.created_at == other.created_at
+      self.name == other.name
     }
 }

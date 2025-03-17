@@ -7,7 +7,6 @@ use std::io::Write;
 pub struct DBBranchesRepository {
     path: String
 }
-
 impl DBBranchesRepository {
 
     pub fn new(path: String) -> Self {
