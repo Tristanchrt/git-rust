@@ -40,7 +40,7 @@ impl CommitToCreate {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Commit {
     id: Uuid,
     parent_id: Uuid,

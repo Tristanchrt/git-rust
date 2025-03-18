@@ -1,7 +1,6 @@
 mod branch_fixtures;
 
-use chrono::NaiveDateTime;
-use mockall::{mock, predicate::*, Predicate};
+use mockall::{mock, Predicate};
 use git_rust::domain::branch::Branch;
 use git_rust::domain::branches_repository::BranchesRepository;
 use git_rust::domain::current_branch_repository::CurrentBranchRepository;
@@ -25,11 +24,6 @@ mock! {
     }
 }
 
-fn branch_matcher(name: &str, date: &str) -> Branch {
-    let created_at = NaiveDateTime::parse_from_str(date, "%Y-%m-%d %H:%M:%S").unwrap();
-    Branch::new(name.to_string(), created_at)
-}
-
 #[cfg(test)]
 mod branch_handler_test {
     use mockall::predicate::eq;
@@ -41,8 +35,11 @@ mod branch_handler_test {
     fn test_should_create_branch() {
 
         let mut mock_branches_repo = MockBranchesRepository::new();
-        mock_branches_repo.expect_save()
-            .times(1).with(eq(sample_branch())).return_const(());
+        mock_branches_repo
+            .expect_save()
+            .times(1)
+            .with(eq(sample_branch()))
+            .return_const(());
 
         let mock_current_branch_repo = MockCurrentBranchRepository::new();
 
@@ -78,6 +75,6 @@ mod branch_handler_test {
         mock_current_branch_repo.expect_save().times(1).with(eq(sample_branch())).return_const(());
 
         let branch_handler = BranchHandler::new(Box::new(mock_branches_repo), Box::new(mock_current_branch_repo));
-        let branch = branch_handler.checkout("toto".to_string());
+        let _ = branch_handler.checkout("toto".to_string());
     }
 }
