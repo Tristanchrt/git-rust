@@ -4,11 +4,10 @@
 mod commit_handler_test {
     use std::process::Command;
 
-    // TODO
     #[test]
     fn should_save_commit() {
         let output = Command::new("cargo")
-            .args(&["run", "--", "branch", "-m", "I'm a new Commit"])
+            .args(&["run", "--", "commit", "-m", "I'm a new Commit"])
             .output()
             .expect("Failed to execute cargo run");
 
@@ -39,7 +38,7 @@ mod commit_handler_test {
             .output()
             .expect("Failed to execute cargo run");
 
-        assert!(String::from_utf8_lossy(&output.stdout).contains("Branch checkout "));
+        assert!(String::from_utf8_lossy(&output.stdout).contains("Checkout branch "));
         assert!(String::from_utf8_lossy(&output.stdout).contains("feat/toto"));
     }
 }
