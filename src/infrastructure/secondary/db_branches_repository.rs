@@ -3,22 +3,18 @@ use crate::domain::branch::Branch;
 use crate::domain::branches_repository::BranchesRepository;
 use crate::infrastructure::secondary::branch_entity::BranchEntity;
 use std::io::Write;
+use crate::infrastructure::secondary::branches_repository_file::BranchesRepositoryFile;
 
-pub struct DBBranchesRepository {
-    path: String
-}
+pub struct DBBranchesRepository;
+
 impl DBBranchesRepository {
 
-    pub fn new(path: String) -> Self {
-        Self { path }
+    pub fn new() -> Self {
+        Self
     }
 
     pub fn save_to_file(&self, branch: &Branch) {
-        let mut file = OpenOptions::new()
-            .write(true)
-            .append(true)
-            .open(&self.path)
-            .expect("Couldn't open file");
+        let mut file = BranchesRepositoryFile::write_file();
 
         if let Err(e) = writeln!(file, "{}", BranchEntity::from(branch).to_string()) {
             panic!("Couldn't save commit: {}", e);
@@ -26,13 +22,13 @@ impl DBBranchesRepository {
     }
 
     pub fn get_branches(&self) -> Vec<Branch> {
-        let file = std::fs::read_to_string(&self.path).unwrap();
+        let file = BranchesRepositoryFile::read_string();
 
         file.lines().map(|line| BranchEntity::from_string(line).to_domain()).collect()
     }
 
     pub fn get_by_name(&self, branch_name: String) -> Option<Branch> {
-        let file = std::fs::read_to_string(&self.path).unwrap();
+        let file = BranchesRepositoryFile::read_string();
 
         file.lines()
             .map(|line| BranchEntity::from_string(line).to_domain())

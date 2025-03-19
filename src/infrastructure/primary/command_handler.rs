@@ -50,7 +50,7 @@ impl COMMAND {
         Some(COMMAND::BRANCH(|args| {
 
             // TODO
-            let branches_repo = Box::new(DBBranchesRepository::new("db/branches.txt".to_string()));
+            let branches_repo = Box::new(DBBranchesRepository::new());
             let current_branch_repo = Box::new(DBCurrentBranchRepository::new("db/current_branch.txt".to_string()));
             let service = BranchesApplicationService::new(branches_repo, current_branch_repo);
 
@@ -78,7 +78,7 @@ impl COMMAND {
                     let branch = service.checkout(branch_name.clone());
                     return format!("Checkout branch from {:?} to {:?}", branch_name, branch.name())
                 }
-                _ => "Command not found".to_string()
+                _ => "Branch Command not found".to_string()
             }
         }))
     }
