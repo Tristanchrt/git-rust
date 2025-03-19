@@ -5,7 +5,7 @@ mod file_shared;
 const TEST_DB_PATH: &str = "tests/db/branches_test.txt";
 
 #[cfg(test)]
-mod commit_test {
+mod branches_repository_test {
     use git_rust::domain::branches_repository::BranchesRepository;
     use git_rust::infrastructure::secondary::db_branches_repository::DBBranchesRepository;
     use crate::branch_fixtures::sample_branch;

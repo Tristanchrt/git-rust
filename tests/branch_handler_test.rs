@@ -32,6 +32,43 @@ mod branch_handler_test {
     use crate::{MockBranchesRepository, MockCurrentBranchRepository};
 
     #[test]
+    #[should_panic(expected = "Branch not found")]
+    fn test_should_panic_error_when_branch_not_found() {
+
+        let mut mock_branches_repo = MockBranchesRepository::new();
+        mock_branches_repo.expect_get_by_name().times(1).with(eq("toto".to_string())).return_const(None);
+
+        let mut mock_current_branch_repo = MockCurrentBranchRepository::new();
+        mock_current_branch_repo.expect_save().times(1).with(eq(sample_branch())).return_const(());
+
+        let branch_handler = BranchHandler::new(Box::new(mock_branches_repo), Box::new(mock_current_branch_repo));
+        let _ = branch_handler.checkout("toto".to_string());
+    }
+
+    #[test]
+    #[should_panic(expected = "Branch name already taken")]
+    fn test_should_panic_when_branch_name_already_taken() {
+
+        let mut mock_branches_repo = MockBranchesRepository::new();
+        mock_branches_repo
+            .expect_save()
+            .times(1)
+            .with(eq(sample_branch()))
+            .return_const(());
+
+        mock_branches_repo
+            .expect_get_by_name()
+            .times(1)
+            .with(eq("toto".to_string()))
+            .return_const(Some(sample_branch()));
+
+        let mock_current_branch_repo = MockCurrentBranchRepository::new();
+
+        let branch_handler = BranchHandler::new(Box::new(mock_branches_repo), Box::new(mock_current_branch_repo));
+        let branch = branch_handler.create_branch(sample_branch_to_create());
+    }
+
+    #[test]
     fn test_should_create_branch() {
 
         let mut mock_branches_repo = MockBranchesRepository::new();
@@ -40,6 +77,12 @@ mod branch_handler_test {
             .times(1)
             .with(eq(sample_branch()))
             .return_const(());
+
+        mock_branches_repo
+            .expect_get_by_name()
+            .times(1)
+            .with(eq("toto".to_string()))
+            .return_const(None);
 
         let mock_current_branch_repo = MockCurrentBranchRepository::new();
 
@@ -62,19 +105,5 @@ mod branch_handler_test {
         let branch = branch_handler.checkout("toto".to_string());
 
         assert_eq!(branch.name(), "toto");
-    }
-
-    #[test]
-    #[should_panic(expected = "Branch not found")]
-    fn test_should_panic_error_when_branch_not_found() {
-
-        let mut mock_branches_repo = MockBranchesRepository::new();
-        mock_branches_repo.expect_get_by_name().times(1).with(eq("toto".to_string())).return_const(None);
-
-        let mut mock_current_branch_repo = MockCurrentBranchRepository::new();
-        mock_current_branch_repo.expect_save().times(1).with(eq(sample_branch())).return_const(());
-
-        let branch_handler = BranchHandler::new(Box::new(mock_branches_repo), Box::new(mock_current_branch_repo));
-        let _ = branch_handler.checkout("toto".to_string());
     }
 }

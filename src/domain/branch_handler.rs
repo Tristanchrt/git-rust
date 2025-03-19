@@ -31,6 +31,10 @@ impl BranchHandler {
     }
 
     pub fn create_branch(&self, branch_to_create: BranchToCreate) -> Branch {
+        if self.branches_repository.get_by_name(branch_to_create.name()).is_some() {
+            panic!("Branch name already taken");
+        }
+
         let branch = branch_to_create.create();
         self.branches_repository.save(&branch);
         branch

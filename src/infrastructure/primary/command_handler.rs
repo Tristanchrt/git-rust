@@ -50,7 +50,7 @@ impl COMMAND {
         Some(COMMAND::BRANCH(|args| {
 
             // TODO
-            let branches_repo = Box::new(DBBranchesRepository::new());
+            let branches_repo = Box::new(DBBranchesRepository::new("db/branches.txt".to_string()));
             let current_branch_repo = Box::new(DBCurrentBranchRepository::new("db/current_branch.txt".to_string()));
             let service = BranchesApplicationService::new(branches_repo, current_branch_repo);
 
