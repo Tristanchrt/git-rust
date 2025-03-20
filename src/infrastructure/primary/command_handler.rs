@@ -33,8 +33,10 @@ impl COMMAND {
     fn commit_commands() -> Option<COMMAND> {
         Some(COMMAND::COMMIT(|args| {
             // TODO find a better way
-            let repo: Box<dyn CommitsRepository> = Box::new(DBCommitsRepository::new("db/commits.txt".to_string()));
-            let service = CommitsApplicationService::new(repo);
+            let commit_repo: Box<dyn CommitsRepository> = Box::new(DBCommitsRepository::new("db/commits.txt".to_string()));
+            let current_branch_repo = Box::new(DBCurrentBranchRepository::new("db/current_branch.txt".to_string()));
+
+            let service = CommitsApplicationService::new(commit_repo, current_branch_repo);
 
             if args.len() < 4 {
                 return "No message provided".to_string();

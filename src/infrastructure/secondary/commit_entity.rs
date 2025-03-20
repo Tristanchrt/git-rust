@@ -7,6 +7,7 @@ pub struct CommitEntity {
     parent_id: Uuid,
     message: String,
     created_at: NaiveDateTime,
+    branch_id: String
 }
 
 impl CommitEntity {
@@ -17,12 +18,13 @@ impl CommitEntity {
             id: Uuid::parse_str(line.get(0).unwrap()).unwrap(),
             parent_id: Uuid::parse_str(line.get(1).unwrap()).unwrap(),
             message: line.get(2).unwrap().to_string(),
-            created_at: NaiveDateTime::parse_from_str(line.get(3).unwrap(), "%Y-%m-%d %H:%M:%S").unwrap()
+            created_at: NaiveDateTime::parse_from_str(line.get(3).unwrap(), "%Y-%m-%d %H:%M:%S").unwrap(),
+            branch_id: line.get(4).unwrap().to_string(),
         }
     }
 
     pub fn to_string(&self) -> String {
-        format!("{},{},{},{}", self.id, self.parent_id, self.message, self.created_at)
+        format!("{},{},{},{},{}", self.id, self.parent_id, self.message, self.created_at, self.branch_id)
     }
 }
 
@@ -32,6 +34,7 @@ impl PartialEq for CommitEntity {
             && self.parent_id.to_string() == other.parent_id.to_string()
             && self.created_at == other.created_at
             && self.message == other.message
+            && self.branch_id == other.branch_id
     }
 }
 
@@ -41,12 +44,13 @@ impl CommitEntity {
             id: commit.id().clone(),
             parent_id: commit.parent_id().clone(),
             message: commit.message().clone(),
-            created_at: commit.created_at().clone()
+            created_at: commit.created_at().clone(),
+            branch_id: commit.branch_id().clone()
         }
     }
 
     pub fn to_domain(&self) -> Commit {
-        Commit::new(self.id.clone(), self.parent_id.clone(), self.message.clone(), self.created_at.clone())
+        Commit::new(self.id.clone(), self.parent_id.clone(), self.message.clone(), self.created_at.clone(), self.branch_id.clone())
     }
 
     pub fn id(&self) -> &Uuid {
@@ -63,5 +67,9 @@ impl CommitEntity {
 
     pub fn created_at(&self) -> &NaiveDateTime {
         &self.created_at
+    }
+
+    pub fn branch_id(&self) -> &String {
+        &self.branch_id
     }
 }

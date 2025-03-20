@@ -1,6 +1,7 @@
 use crate::domain::commit::{Commit, CommitToCreate};
 use crate::domain::commit_handler::CommitHandler;
 use crate::domain::commits_repository::CommitsRepository;
+use crate::domain::current_branch_repository::CurrentBranchRepository;
 
 pub struct CommitsApplicationService {
     commit_handler: CommitHandler
@@ -8,8 +9,8 @@ pub struct CommitsApplicationService {
 
 impl CommitsApplicationService {
 
-    pub fn new(db_repository: Box<dyn CommitsRepository>) -> Self {
-        Self { commit_handler: CommitHandler::new(db_repository) }
+    pub fn new(commit_repository: Box<dyn CommitsRepository>, current_branch_repository: Box<dyn CurrentBranchRepository>) -> Self {
+        Self { commit_handler: CommitHandler::new(commit_repository, current_branch_repository) }
     }
 
     pub fn save(&self, to_create: CommitToCreate) -> Commit {

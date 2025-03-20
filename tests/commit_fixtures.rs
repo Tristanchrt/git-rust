@@ -7,7 +7,8 @@ pub fn sample_commit() -> Commit {
         Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a8").unwrap(),
         Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap(),
         "Init commit".to_string(),
-        NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap()
+        NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap(),
+        "toto".to_string()
     )
 }
 
@@ -16,7 +17,8 @@ pub fn sample_default_commit() -> Commit {
         Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a8").unwrap(),
         Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap(),
         "Init commit".to_string(),
-        NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap()
+        NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap(),
+        "toto".to_string()
     )
 }
 

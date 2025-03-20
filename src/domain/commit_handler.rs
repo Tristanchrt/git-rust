@@ -1,26 +1,34 @@
 use crate::domain::commit::{Commit, CommitToCreate};
 use crate::domain::commits_repository::CommitsRepository;
+use crate::domain::current_branch_repository::CurrentBranchRepository;
 
 pub struct CommitHandler {
-    db_repository: Box<dyn CommitsRepository>,
+    commit_repository: Box<dyn CommitsRepository>,
+    current_branch_repository: Box<dyn CurrentBranchRepository>
 }
 
 impl CommitHandler {
 
-    pub fn new(db_repository: Box<dyn CommitsRepository>) -> Self {
+    pub fn new(commit_repository: Box<dyn CommitsRepository>, current_branch_repository: Box<dyn CurrentBranchRepository>) -> Self {
         Self {
-            db_repository
+            commit_repository,
+            current_branch_repository
         }
     }
 
     pub fn create_commit(&self, to_create: CommitToCreate) -> Commit {
-        let parent_commit_id = self.db_repository
+        let parent_commit_id = self.commit_repository
             .get_last_commit()
             .map(|commit| commit.id().to_owned())
             .unwrap_or_else(|| CommitToCreate::default_parent_id());
 
-        let commit = to_create.create(parent_commit_id);
-        self.db_repository.save(&commit);
+        let branch = self
+            .current_branch_repository
+            .get()
+            .expect("Current branch not found");
+
+        let commit = to_create.create(parent_commit_id, branch.name());
+        self.commit_repository.save(&commit);
 
         commit
     }

@@ -1,7 +1,7 @@
 mod commit_fixtures;
 
 #[cfg(test)]
-mod cli_commit_test {
+mod commit_entity_test {
     use chrono::NaiveDateTime;
     use uuid::Uuid;
     use git_rust::infrastructure::secondary::commit_entity::CommitEntity;
@@ -25,12 +25,12 @@ mod cli_commit_test {
         let commit = sample_commit();
         let commit_entity = CommitEntity::from(&commit);
 
-        assert_eq!(commit_entity.to_string(), "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00");
+        assert_eq!(commit_entity.to_string(), "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00,toto");
     }
 
     #[test]
     fn test_should_convert_from_string() {
-        let line = "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00";
+        let line = "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00,toto";
 
         let commit_entity = CommitEntity::from_string(line);
 
@@ -38,5 +38,6 @@ mod cli_commit_test {
         assert_eq!(commit_entity.parent_id().to_string(), Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap().to_string());
         assert_eq!(commit_entity.message(), "Init commit");
         assert_eq!(commit_entity.created_at().to_string(), NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap().to_string());
+        assert_eq!(commit_entity.branch_id().clone(), "toto".to_string());
     }
 }

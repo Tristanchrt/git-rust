@@ -23,12 +23,13 @@ impl CommitToCreate {
 }
 
 impl CommitToCreate {
-    pub fn create(&self, parent_id: Uuid) -> Commit {
+    pub fn create(&self, parent_id: Uuid, branch_id: String) -> Commit {
         Commit {
             id: Uuid::new_v4(),
             parent_id,
             message: self.message.clone(),
             created_at: Self::now(),
+            branch_id
         }
     }
 
@@ -45,7 +46,8 @@ pub struct Commit {
     id: Uuid,
     parent_id: Uuid,
     message: String,
-    created_at: NaiveDateTime
+    created_at: NaiveDateTime,
+    branch_id: String
 }
 
 impl PartialEq for Commit {
@@ -54,16 +56,18 @@ impl PartialEq for Commit {
             && self.parent_id.to_string() == other.parent_id.to_string()
             && self.created_at == other.created_at
             && self.message == other.message
+            && self.branch_id == other.branch_id
     }
 }
 
 impl Commit {
-    pub fn new(id: Uuid, parent_id: Uuid, message: String, created_at: NaiveDateTime) -> Self {
+    pub fn new(id: Uuid, parent_id: Uuid, message: String, created_at: NaiveDateTime, branch_id: String) -> Self {
         Self {
             id,
             parent_id,
             message,
-            created_at
+            created_at,
+            branch_id
         }
     }
 
@@ -81,5 +85,9 @@ impl Commit {
 
     pub fn created_at(&self) -> NaiveDateTime {
         self.created_at
+    }
+
+    pub fn branch_id(&self) -> &String {
+        &self.branch_id
     }
 }

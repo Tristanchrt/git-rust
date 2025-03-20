@@ -10,7 +10,8 @@ pub struct CliCommit {
     id: Uuid,
     parent_id: Uuid,
     message: String,
-    created_at: NaiveDateTime
+    created_at: NaiveDateTime,
+    branch_id: String
 }
 
 impl CliCommit {
@@ -19,12 +20,13 @@ impl CliCommit {
             id: commit.id(),
             parent_id: commit.parent_id(),
             message: commit.message().clone(),
-            created_at: commit.created_at()
+            created_at: commit.created_at(),
+            branch_id: commit.branch_id().clone()
         }
     }
 
     pub fn to_display(&self) -> String {
-        format!("{} | {} | {} | {}", self.id, self.parent_id, self.created_at, self.message)
+        format!("{} | {} | {} | {} | {}", self.id, self.parent_id, self.created_at, self.message, self.branch_id)
     }
 }
 
