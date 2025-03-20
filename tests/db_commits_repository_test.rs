@@ -30,9 +30,8 @@ mod commit_test {
         let db_repository = DBCommitsRepository::new(TEST_DB_PATH.to_string());
         let commit = sample_commit();
         db_repository.save(&commit);
-        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00");
 
-        clean_file(TEST_DB_PATH.to_string());
+        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00,toto");
     }
 
     #[test]
@@ -44,7 +43,7 @@ mod commit_test {
         db_repository.save(&commit);
         let last_commit = db_repository.get_last_commit().unwrap();
 
-        clean_file(TEST_DB_PATH.to_string());
+        assert!(last_commit.eq(&commit));
     }
 
     #[test]

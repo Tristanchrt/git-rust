@@ -8,6 +8,7 @@ mod git_rust_steps_test {
         #[test]
         fn should_save_commit() {
             // TODO handle current branch
+            // TODO real component test
             let output = run_cargo(vec!["commit", "-m", "I'm a new Commit"]);
 
             assert!(String::from_utf8_lossy(&output.stdout).contains("Committing changes "));

@@ -20,6 +20,8 @@ mod branches_repository_test {
         let db_repository = DBBranchesRepository::new("toto".to_string());
         let branch = sample_branch();
         db_repository.save(&branch);
+
+        clean_file(TEST_DB_PATH.to_string());
     }
 
     #[test]
@@ -52,6 +54,11 @@ mod branches_repository_test {
 
     #[test]
     fn test_should_get_branch_by_name() {
+        // TODO test are run in parallel either disabled it or find another way
+        // [dev-dependencies]
+        // test-serial = "0.1"
+        // #[serial]
+
         clean_file(TEST_DB_PATH.to_string());
 
         let db_repository = DBBranchesRepository::new(TEST_DB_PATH.to_string());
