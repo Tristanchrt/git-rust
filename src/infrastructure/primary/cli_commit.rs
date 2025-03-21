@@ -14,8 +14,12 @@ pub struct CliCommit {
     branch_id: String
 }
 
+pub struct CliCommits {
+    value: Vec<CliCommit>
+}
+
 impl CliCommit {
-    pub fn from(commit: Commit) -> Self {
+    pub fn from(commit: &Commit) -> Self {
         Self {
             id: commit.id(),
             parent_id: commit.parent_id(),
@@ -40,4 +44,18 @@ impl CliCommitToCreate {
     pub fn to_domain(&self) -> CommitToCreate {
         CommitToCreate::new(self.message.clone())
     }
+}
+
+impl CliCommits {
+
+    pub fn from(commits: Vec<Commit>) -> Self {
+        Self {
+            value: commits.iter().map(|commit| CliCommit::from(commit)).collect()
+        }
+    }
+
+    pub fn to_display(&self) -> String {
+        self.value.iter().map(|commit| commit.to_display()).collect::<Vec<String>>().join("\n ")
+    }
+
 }

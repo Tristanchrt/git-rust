@@ -16,4 +16,8 @@ impl CommitsApplicationService {
     pub fn save(&self, to_create: CommitToCreate) -> Commit {
         self.commit_handler.create_commit(to_create)
     }
+
+    pub fn get_commits(&self, branch_name: String) -> Vec<Commit> {
+        self.commit_handler.get_commits(branch_name)
+    }
 }

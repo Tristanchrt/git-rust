@@ -6,6 +6,20 @@ mod git_rust_steps_test {
         use crate::git_rust_steps_test::run_cargo;
 
         #[test]
+        fn should_get_error_when_unknown_command() {
+            let output = run_cargo(vec!["commit", "-z"]);
+
+            assert!(String::from_utf8_lossy(&output.stdout).contains("Commit Command not found"));
+        }
+
+        #[test]
+        fn should_get_error_when_missing_command() {
+            let output = run_cargo(vec!["commit"]);
+
+            assert!(String::from_utf8_lossy(&output.stdout).contains("No command provided"));
+        }
+
+        #[test]
         fn should_save_commit() {
             // TODO handle current branch
             // TODO real component test
@@ -21,6 +35,24 @@ mod git_rust_steps_test {
             let output = run_cargo(vec!["commit", "-m"]);
 
             assert!(String::from_utf8_lossy(&output.stdout).contains("No message provided"));
+        }
+
+        #[test]
+        fn should_get_error_when_missing_branch_name() {
+            let output = run_cargo(vec!["commit", "-l"]);
+
+            assert!(String::from_utf8_lossy(&output.stdout).contains("No branch name provided"));
+        }
+
+        #[test]
+        fn should_get_commits_from_branch() {
+            let _ = run_cargo(vec!["commit", "-m", "I'm a second Commit"]);
+            let output = run_cargo(vec!["commit", "-l", "main"]);
+
+            assert!(String::from_utf8_lossy(&output.stdout).contains("Commits listed"));
+            assert!(String::from_utf8_lossy(&output.stdout).contains("I'm a new Commit"));
+            assert!(String::from_utf8_lossy(&output.stdout).contains("I'm a second Commit"));
+            assert!(String::from_utf8_lossy(&output.stdout).contains("main"));
         }
     }
 

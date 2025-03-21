@@ -2,7 +2,7 @@ use crate::applications::branches_application_service::BranchesApplicationServic
 use crate::applications::commits_application_service::CommitsApplicationService;
 use crate::domain::commits_repository::CommitsRepository;
 use crate::infrastructure::primary::cli_branches::{CliBranch, CliBranchToCreate};
-use crate::infrastructure::primary::cli_commit::{CliCommit, CliCommitToCreate};
+use crate::infrastructure::primary::cli_commit::{CliCommit, CliCommitToCreate, CliCommits};
 use crate::infrastructure::secondary::db_branches_repository::DBBranchesRepository;
 use crate::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
 use crate::infrastructure::secondary::db_current_branch_repository::DBCurrentBranchRepository;
@@ -38,13 +38,30 @@ impl COMMAND {
 
             let service = CommitsApplicationService::new(commit_repo, current_branch_repo);
 
-            if args.len() < 4 {
-                return "No message provided".to_string();
+            if args.len() < 3 {
+                return "No command provided".to_string()
             }
 
-            let cli_commit = CliCommitToCreate::new(args[3].clone());
-            let commit = service.save(cli_commit.to_domain());
-            return format!("Committing changes {:?}", CliCommit::from(commit).to_display())
+            match args.get(2).unwrap().as_str() {
+                "-m" => {
+                    if args.len() < 4 {
+                        return "No message provided".to_string();
+                    }
+
+                    let cli_commit = CliCommitToCreate::new(args[3].clone());
+                    let commit = service.save(cli_commit.to_domain());
+                    return format!("Committing changes {:?}", CliCommit::from(&commit).to_display())
+                }
+                "-l" => {
+                    if args.len() < 4 {
+                        return "No branch name provided".to_string();
+                    }
+
+                    let commits = service.get_commits(args[3].clone());
+                    return format!("Commits listed {:?}", CliCommits::from(commits).to_display())
+                }
+                _ => "Commit Command not found".to_string()
+            }
         }))
     }
 

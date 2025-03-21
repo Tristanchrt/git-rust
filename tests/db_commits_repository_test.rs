@@ -9,7 +9,7 @@ const TEST_DB_PATH: &str = "tests/db/commits_test.txt";
 mod commit_test {
     use git_rust::domain::commits_repository::CommitsRepository;
     use git_rust::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
-    use crate::commit_fixtures::sample_commit;
+    use crate::commit_fixtures::{sample_commit, sample_commit_two};
     use crate::file_shared::{clean_file, read_file_line};
     use super::*;
 
@@ -54,5 +54,21 @@ mod commit_test {
         let last_commit = db_repository.get_last_commit();
 
         assert!(last_commit.is_none());
+    }
+
+    #[test]
+    fn test_get_commits_from_branch() {
+        clean_file(TEST_DB_PATH.to_string());
+
+        let db_repository = DBCommitsRepository::new(TEST_DB_PATH.to_string());
+        let commit = sample_commit();
+        let commit_two = sample_commit_two();
+        db_repository.save(&commit);
+        db_repository.save(&commit_two);
+
+        let commits = db_repository.get_commits("toto".to_string());
+
+        assert!(commits.get(0).unwrap().eq(&commit));
+        assert!(commits.get(1).unwrap().eq(&commit_two));
     }
 }

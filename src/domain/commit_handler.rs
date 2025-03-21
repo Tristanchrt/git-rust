@@ -17,6 +17,7 @@ impl CommitHandler {
     }
 
     pub fn create_commit(&self, to_create: CommitToCreate) -> Commit {
+        // TODO add branch to last commit
         let parent_commit_id = self.commit_repository
             .get_last_commit()
             .map(|commit| commit.id().to_owned())
@@ -31,5 +32,9 @@ impl CommitHandler {
         self.commit_repository.save(&commit);
 
         commit
+    }
+
+    pub fn get_commits(&self, branch_name: String) -> Vec<Commit> {
+       self.commit_repository.get_commits(branch_name)
     }
 }
