@@ -21,13 +21,23 @@ mod git_rust_steps_test {
 
         #[test]
         fn should_save_commit() {
-            // TODO handle current branch
-            // TODO real component test
             let output = run_cargo(vec!["commit", "-m", "I'm a new Commit"]);
 
             assert!(String::from_utf8_lossy(&output.stdout).contains("Committing changes "));
             assert!(String::from_utf8_lossy(&output.stdout).contains("I'm a new Commit"));
             assert!(String::from_utf8_lossy(&output.stdout).contains("main"));
+        }
+
+        #[test]
+        fn should_save_commit_and_checkout() {
+            let _ = run_cargo(vec!["commit", "-m", "I'm a new Commit"]);
+            let _ = run_cargo(vec!["branch", "-c", "feat/toto"]);
+            let _ = run_cargo(vec!["branch", "-m", "feat/toto"]);
+            let output = run_cargo(vec!["commit", "-m", "I'm a new Commit for feat/toto"]);
+
+            assert!(String::from_utf8_lossy(&output.stdout).contains("Committing changes "));
+            assert!(String::from_utf8_lossy(&output.stdout).contains("I'm a new Commit for feat/toto"));
+            assert!(String::from_utf8_lossy(&output.stdout).contains("feat/toto"));
         }
 
         #[test]

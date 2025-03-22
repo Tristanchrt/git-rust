@@ -18,15 +18,15 @@ impl CommitHandler {
 
     pub fn create_commit(&self, to_create: CommitToCreate) -> Commit {
         // TODO add branch to last commit
-        let parent_commit_id = self.commit_repository
-            .get_last_commit()
-            .map(|commit| commit.id().to_owned())
-            .unwrap_or_else(|| CommitToCreate::default_parent_id());
-
         let branch = self
             .current_branch_repository
             .get()
             .expect("Current branch not found");
+
+        let parent_commit_id = self.commit_repository
+            .get_last_commit(branch.name())
+            .map(|commit| commit.id().to_owned())
+            .unwrap_or_else(|| CommitToCreate::default_parent_id());
 
         let commit = to_create.create(parent_commit_id, branch.name());
         self.commit_repository.save(&commit);

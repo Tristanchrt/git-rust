@@ -25,13 +25,13 @@ impl DBCommitsRepository {
         }
     }
 
-    fn get_last_commit(&self) -> Option<Commit> {
+    fn get_last_commit(&self, branch_name: String) -> Option<Commit> {
         let file = std::fs::read_to_string(&self.path).unwrap();
 
-        match file.lines().last() {
-            Some(last_line) => Some(CommitEntity::from_string(last_line).to_domain()),
-            None => None
-        }
+        file
+            .lines()
+            .map(|line| CommitEntity::from_string(line).to_domain())
+            .filter(|commit|  commit.branch_id().eq(&branch_name)).last()
     }
 
     fn get_commits(&self, branch_name: String) -> Vec<Commit> {
@@ -50,8 +50,8 @@ impl CommitsRepository for DBCommitsRepository {
         self.save_to_file(commit);
     }
 
-    fn get_last_commit(&self) -> Option<Commit> {
-        self.get_last_commit()
+    fn get_last_commit(&self, branch_name: String) -> Option<Commit> {
+        self.get_last_commit(branch_name)
     }
     fn get_commits(&self, branch_name: String) -> Vec<Commit> {
         self.get_commits(branch_name)
