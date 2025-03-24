@@ -28,7 +28,7 @@ impl CommitHandler {
             .commit_repository
             .get_last_commit(branch.name())
             .map(|commit| commit.id().to_owned())
-            .unwrap_or_else(|| CommitToCreate::default_parent_id());
+            .unwrap_or_else(CommitToCreate::default_parent_id);
 
         let commit = to_create.create(parent_commit_id, branch.name());
         self.commit_repository.save(&commit);

@@ -119,7 +119,7 @@ mod git_rust_steps_test {
 
     fn run_cargo(args: Vec<&str>) -> Output {
         Command::new("cargo")
-            .args(&["run", "--"])
+            .args(["run", "--"])
             .args(args)
             .output()
             .expect("Failed to execute cargo run")

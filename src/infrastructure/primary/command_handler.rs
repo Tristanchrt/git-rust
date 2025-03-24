@@ -47,10 +47,10 @@ impl COMMAND {
 
                     let cli_commit = CliCommitToCreate::new(args[3].clone());
                     let commit = service.save(cli_commit.to_domain());
-                    return format!(
+                    format!(
                         "Committing changes {:?}",
                         CliCommit::from(&commit).to_display()
-                    );
+                    )
                 }
                 "-l" => {
                     if args.len() < 4 {
@@ -58,10 +58,10 @@ impl COMMAND {
                     }
 
                     let commits = service.get_commits(args[3].clone());
-                    return format!(
+                    format!(
                         "Commits listed {:?}",
                         CliCommits::from(commits).to_display()
-                    );
+                    )
                 }
                 _ => "Commit Command not found".to_string(),
             }
@@ -89,7 +89,7 @@ impl COMMAND {
 
                     let cli_branch = CliBranchToCreate::new(args[3].clone());
                     let branch = service.save(cli_branch.to_domain());
-                    return format!("Branch created {:?}", CliBranch::from(branch).to_display());
+                    format!("Branch created {:?}", CliBranch::from(branch).to_display())
                 }
                 "-m" => {
                     if args.len() < 4 {
@@ -98,11 +98,11 @@ impl COMMAND {
 
                     let branch_name = args[3].clone();
                     let branch = service.checkout(branch_name.clone());
-                    return format!(
+                    format!(
                         "Checkout branch from {:?} to {:?}",
                         branch_name,
                         branch.name()
-                    );
+                    )
                 }
                 _ => "Branch Command not found".to_string(),
             }

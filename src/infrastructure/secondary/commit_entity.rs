@@ -15,7 +15,7 @@ impl CommitEntity {
         let line: Vec<&str> = line.split(",").collect();
 
         CommitEntity {
-            id: Uuid::parse_str(line.get(0).unwrap()).unwrap(),
+            id: Uuid::parse_str(line.first().unwrap()).unwrap(),
             parent_id: Uuid::parse_str(line.get(1).unwrap()).unwrap(),
             message: line.get(2).unwrap().to_string(),
             created_at: NaiveDateTime::parse_from_str(line.get(3).unwrap(), "%Y-%m-%d %H:%M:%S")
@@ -45,20 +45,20 @@ impl PartialEq for CommitEntity {
 impl CommitEntity {
     pub fn from(commit: &Commit) -> Self {
         Self {
-            id: commit.id().clone(),
-            parent_id: commit.parent_id().clone(),
+            id: commit.id(),
+            parent_id: commit.parent_id(),
             message: commit.message().clone(),
-            created_at: commit.created_at().clone(),
+            created_at: commit.created_at(),
             branch_id: commit.branch_id().clone(),
         }
     }
 
     pub fn to_domain(&self) -> Commit {
         Commit::new(
-            self.id.clone(),
-            self.parent_id.clone(),
+            self.id,
+            self.parent_id,
             self.message.clone(),
-            self.created_at.clone(),
+            self.created_at,
             self.branch_id.clone(),
         )
     }

@@ -15,7 +15,7 @@ impl DBCommitsRepository {
 
     fn save_to_file(&self, commit: &Commit) {
         let mut file = OpenOptions::new()
-            .write(true)
+            
             .append(true)
             .open(&self.path)
             .expect("Couldn't open file");

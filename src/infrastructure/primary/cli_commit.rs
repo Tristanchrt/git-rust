@@ -52,7 +52,7 @@ impl CliCommits {
         Self {
             value: commits
                 .iter()
-                .map(|commit| CliCommit::from(commit))
+                .map(CliCommit::from)
                 .collect(),
         }
     }

@@ -1,4 +1,3 @@
-use std::io::BufRead;
 mod commit_fixtures;
 mod file_shared;
 
@@ -69,7 +68,7 @@ mod commit_test {
 
         let commits = db_repository.get_commits("toto".to_string());
 
-        assert!(commits.get(0).unwrap().eq(&commit));
+        assert!(commits.first().unwrap().eq(&commit));
         assert!(commits.get(1).unwrap().eq(&commit_two));
     }
 }

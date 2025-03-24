@@ -11,7 +11,7 @@ impl BranchEntity {
         let line: Vec<&str> = line.split(",").collect();
 
         BranchEntity {
-            name: line.get(0).unwrap().to_string(),
+            name: line.first().unwrap().to_string(),
             created_at: NaiveDateTime::parse_from_str(line.get(1).unwrap(), "%Y-%m-%d %H:%M:%S")
                 .unwrap(),
         }
@@ -32,7 +32,7 @@ impl BranchEntity {
     pub fn from(commit: &Branch) -> Self {
         Self {
             name: commit.name().clone(),
-            created_at: commit.created_at().clone(),
+            created_at: commit.created_at(),
         }
     }
 

@@ -50,7 +50,7 @@ mod branches_repository_test {
 
         let branches = db_repository.get_branches();
 
-        assert!(sample_branch().eq(branches.get(0).unwrap()));
+        assert!(sample_branch().eq(branches.first().unwrap()));
 
         clean_file(TEST_DB_PATH.to_string());
     }
