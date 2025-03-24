@@ -1,9 +1,9 @@
-use chrono::NaiveDateTime;
 use crate::domain::branch::Branch;
+use chrono::NaiveDateTime;
 
 pub struct BranchEntity {
     name: String,
-    created_at: NaiveDateTime
+    created_at: NaiveDateTime,
 }
 
 impl BranchEntity {
@@ -12,7 +12,8 @@ impl BranchEntity {
 
         BranchEntity {
             name: line.get(0).unwrap().to_string(),
-            created_at: NaiveDateTime::parse_from_str(line.get(1).unwrap(), "%Y-%m-%d %H:%M:%S").unwrap()
+            created_at: NaiveDateTime::parse_from_str(line.get(1).unwrap(), "%Y-%m-%d %H:%M:%S")
+                .unwrap(),
         }
     }
 
@@ -31,7 +32,7 @@ impl BranchEntity {
     pub fn from(commit: &Branch) -> Self {
         Self {
             name: commit.name().clone(),
-            created_at: commit.created_at().clone()
+            created_at: commit.created_at().clone(),
         }
     }
 

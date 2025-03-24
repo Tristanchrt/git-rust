@@ -1,5 +1,5 @@
-use chrono::NaiveDateTime;
 use crate::domain::branch::{Branch, BranchToCreate};
+use chrono::NaiveDateTime;
 
 pub struct CliBranchToCreate {
     pub name: String,
@@ -14,7 +14,7 @@ impl CliBranch {
     pub fn from(branch: Branch) -> Self {
         Self {
             name: branch.name().clone(),
-            created_at: branch.created_at()
+            created_at: branch.created_at(),
         }
     }
 
@@ -25,9 +25,7 @@ impl CliBranch {
 
 impl CliBranchToCreate {
     pub fn new(name: String) -> Self {
-        Self {
-            name,
-        }
+        Self { name }
     }
 
     pub fn to_domain(&self) -> BranchToCreate {

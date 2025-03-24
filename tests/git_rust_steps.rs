@@ -36,7 +36,9 @@ mod git_rust_steps_test {
             let output = run_cargo(vec!["commit", "-m", "I'm a new Commit for feat/toto"]);
 
             assert!(String::from_utf8_lossy(&output.stdout).contains("Committing changes "));
-            assert!(String::from_utf8_lossy(&output.stdout).contains("I'm a new Commit for feat/toto"));
+            assert!(
+                String::from_utf8_lossy(&output.stdout).contains("I'm a new Commit for feat/toto")
+            );
             assert!(String::from_utf8_lossy(&output.stdout).contains("feat/toto"));
         }
 

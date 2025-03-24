@@ -2,8 +2,8 @@ mod branch_fixtures;
 
 #[cfg(test)]
 mod cli_branch_test {
-    use git_rust::infrastructure::primary::cli_branches::{CliBranch, CliBranchToCreate};
     use crate::branch_fixtures::sample_branch;
+    use git_rust::infrastructure::primary::cli_branches::{CliBranch, CliBranchToCreate};
 
     #[test]
     fn test_should_transform_to_domain() {

@@ -1,13 +1,13 @@
+use crate::domain::commit::Commit;
 use chrono::NaiveDateTime;
 use uuid::Uuid;
-use crate::domain::commit::Commit;
 
 pub struct CommitEntity {
     id: Uuid,
     parent_id: Uuid,
     message: String,
     created_at: NaiveDateTime,
-    branch_id: String
+    branch_id: String,
 }
 
 impl CommitEntity {
@@ -18,13 +18,17 @@ impl CommitEntity {
             id: Uuid::parse_str(line.get(0).unwrap()).unwrap(),
             parent_id: Uuid::parse_str(line.get(1).unwrap()).unwrap(),
             message: line.get(2).unwrap().to_string(),
-            created_at: NaiveDateTime::parse_from_str(line.get(3).unwrap(), "%Y-%m-%d %H:%M:%S").unwrap(),
+            created_at: NaiveDateTime::parse_from_str(line.get(3).unwrap(), "%Y-%m-%d %H:%M:%S")
+                .unwrap(),
             branch_id: line.get(4).unwrap().to_string(),
         }
     }
 
     pub fn to_string(&self) -> String {
-        format!("{},{},{},{},{}", self.id, self.parent_id, self.message, self.created_at, self.branch_id)
+        format!(
+            "{},{},{},{},{}",
+            self.id, self.parent_id, self.message, self.created_at, self.branch_id
+        )
     }
 }
 
@@ -45,12 +49,18 @@ impl CommitEntity {
             parent_id: commit.parent_id().clone(),
             message: commit.message().clone(),
             created_at: commit.created_at().clone(),
-            branch_id: commit.branch_id().clone()
+            branch_id: commit.branch_id().clone(),
         }
     }
 
     pub fn to_domain(&self) -> Commit {
-        Commit::new(self.id.clone(), self.parent_id.clone(), self.message.clone(), self.created_at.clone(), self.branch_id.clone())
+        Commit::new(
+            self.id.clone(),
+            self.parent_id.clone(),
+            self.message.clone(),
+            self.created_at.clone(),
+            self.branch_id.clone(),
+        )
     }
 
     pub fn id(&self) -> &Uuid {

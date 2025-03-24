@@ -1,11 +1,11 @@
-use std::fs::OpenOptions;
 use crate::domain::commit::Commit;
 use crate::domain::commits_repository::CommitsRepository;
-use std::io::Write;
 use crate::infrastructure::secondary::commit_entity::CommitEntity;
+use std::fs::OpenOptions;
+use std::io::Write;
 
 pub struct DBCommitsRepository {
-    path: String
+    path: String,
 }
 
 impl DBCommitsRepository {
@@ -28,24 +28,23 @@ impl DBCommitsRepository {
     fn get_last_commit(&self, branch_name: String) -> Option<Commit> {
         let file = std::fs::read_to_string(&self.path).unwrap();
 
-        file
-            .lines()
+        file.lines()
             .map(|line| CommitEntity::from_string(line).to_domain())
-            .filter(|commit|  commit.branch_id().eq(&branch_name)).last()
+            .filter(|commit| commit.branch_id().eq(&branch_name))
+            .last()
     }
 
     fn get_commits(&self, branch_name: String) -> Vec<Commit> {
         let file = std::fs::read_to_string(&self.path).unwrap();
 
-        file
-            .lines()
+        file.lines()
             .map(|line| CommitEntity::from_string(line).to_domain())
-            .filter(|commit|  commit.branch_id().eq(&branch_name)).collect()
+            .filter(|commit| commit.branch_id().eq(&branch_name))
+            .collect()
     }
 }
 
 impl CommitsRepository for DBCommitsRepository {
-
     fn save(&self, commit: &Commit) {
         self.save_to_file(commit);
     }

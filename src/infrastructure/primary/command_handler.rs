@@ -16,16 +16,10 @@ pub enum COMMAND {
 }
 
 impl COMMAND {
-    pub(crate) fn from_str(
-        input: &str,
-    ) -> Option<COMMAND> {
+    pub(crate) fn from_str(input: &str) -> Option<COMMAND> {
         match input {
-            "commit" => {
-                Self::commit_commands()
-            },
-            "branch" => {
-                Self::branch_commands()
-            },
+            "commit" => Self::commit_commands(),
+            "branch" => Self::branch_commands(),
             _ => None,
         }
     }
@@ -33,13 +27,16 @@ impl COMMAND {
     fn commit_commands() -> Option<COMMAND> {
         Some(COMMAND::COMMIT(|args| {
             // TODO find a better way
-            let commit_repo: Box<dyn CommitsRepository> = Box::new(DBCommitsRepository::new("db/commits.txt".to_string()));
-            let current_branch_repo = Box::new(DBCurrentBranchRepository::new("db/current_branch.txt".to_string()));
+            let commit_repo: Box<dyn CommitsRepository> =
+                Box::new(DBCommitsRepository::new("db/commits.txt".to_string()));
+            let current_branch_repo = Box::new(DBCurrentBranchRepository::new(
+                "db/current_branch.txt".to_string(),
+            ));
 
             let service = CommitsApplicationService::new(commit_repo, current_branch_repo);
 
             if args.len() < 3 {
-                return "No command provided".to_string()
+                return "No command provided".to_string();
             }
 
             match args.get(2).unwrap().as_str() {
@@ -50,7 +47,10 @@ impl COMMAND {
 
                     let cli_commit = CliCommitToCreate::new(args[3].clone());
                     let commit = service.save(cli_commit.to_domain());
-                    return format!("Committing changes {:?}", CliCommit::from(&commit).to_display())
+                    return format!(
+                        "Committing changes {:?}",
+                        CliCommit::from(&commit).to_display()
+                    );
                 }
                 "-l" => {
                     if args.len() < 4 {
@@ -58,23 +58,27 @@ impl COMMAND {
                     }
 
                     let commits = service.get_commits(args[3].clone());
-                    return format!("Commits listed {:?}", CliCommits::from(commits).to_display())
+                    return format!(
+                        "Commits listed {:?}",
+                        CliCommits::from(commits).to_display()
+                    );
                 }
-                _ => "Commit Command not found".to_string()
+                _ => "Commit Command not found".to_string(),
             }
         }))
     }
 
     fn branch_commands() -> Option<COMMAND> {
         Some(COMMAND::BRANCH(|args| {
-
             // TODO
             let branches_repo = Box::new(DBBranchesRepository::new("db/branches.txt".to_string()));
-            let current_branch_repo = Box::new(DBCurrentBranchRepository::new("db/current_branch.txt".to_string()));
+            let current_branch_repo = Box::new(DBCurrentBranchRepository::new(
+                "db/current_branch.txt".to_string(),
+            ));
             let service = BranchesApplicationService::new(branches_repo, current_branch_repo);
 
             if args.len() < 3 {
-                return "No command provided".to_string()
+                return "No command provided".to_string();
             }
 
             match args.get(2).unwrap().as_str() {
@@ -83,11 +87,10 @@ impl COMMAND {
                         return "No branch name provided".to_string();
                     }
 
-                    // TODO handle is_current
                     let cli_branch = CliBranchToCreate::new(args[3].clone());
                     let branch = service.save(cli_branch.to_domain());
-                    return format!("Branch created {:?}", CliBranch::from(branch).to_display())
-                },
+                    return format!("Branch created {:?}", CliBranch::from(branch).to_display());
+                }
                 "-m" => {
                     if args.len() < 4 {
                         return "No branch name provided".to_string();
@@ -95,9 +98,13 @@ impl COMMAND {
 
                     let branch_name = args[3].clone();
                     let branch = service.checkout(branch_name.clone());
-                    return format!("Checkout branch from {:?} to {:?}", branch_name, branch.name())
+                    return format!(
+                        "Checkout branch from {:?} to {:?}",
+                        branch_name,
+                        branch.name()
+                    );
                 }
-                _ => "Branch Command not found".to_string()
+                _ => "Branch Command not found".to_string(),
             }
         }))
     }

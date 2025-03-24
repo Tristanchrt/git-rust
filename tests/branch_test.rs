@@ -1,6 +1,5 @@
 mod branch_fixtures;
 
-
 #[cfg(test)]
 mod branch_test {
     use git_rust::domain::branch::BranchToCreate;

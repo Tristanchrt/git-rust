@@ -4,26 +4,28 @@ use crate::domain::current_branch_repository::CurrentBranchRepository;
 
 pub struct CommitHandler {
     commit_repository: Box<dyn CommitsRepository>,
-    current_branch_repository: Box<dyn CurrentBranchRepository>
+    current_branch_repository: Box<dyn CurrentBranchRepository>,
 }
 
 impl CommitHandler {
-
-    pub fn new(commit_repository: Box<dyn CommitsRepository>, current_branch_repository: Box<dyn CurrentBranchRepository>) -> Self {
+    pub fn new(
+        commit_repository: Box<dyn CommitsRepository>,
+        current_branch_repository: Box<dyn CurrentBranchRepository>,
+    ) -> Self {
         Self {
             commit_repository,
-            current_branch_repository
+            current_branch_repository,
         }
     }
 
     pub fn create_commit(&self, to_create: CommitToCreate) -> Commit {
-        // TODO add branch to last commit
         let branch = self
             .current_branch_repository
             .get()
             .expect("Current branch not found");
 
-        let parent_commit_id = self.commit_repository
+        let parent_commit_id = self
+            .commit_repository
             .get_last_commit(branch.name())
             .map(|commit| commit.id().to_owned())
             .unwrap_or_else(|| CommitToCreate::default_parent_id());
@@ -35,6 +37,6 @@ impl CommitHandler {
     }
 
     pub fn get_commits(&self, branch_name: String) -> Vec<Commit> {
-       self.commit_repository.get_commits(branch_name)
+        self.commit_repository.get_commits(branch_name)
     }
 }

@@ -6,11 +6,11 @@ const TEST_DB_PATH: &str = "tests/db/current_branch_test.txt";
 
 #[cfg(test)]
 mod current_branch_test {
-    use git_rust::domain::current_branch_repository::CurrentBranchRepository;
-    use git_rust::infrastructure::secondary::db_current_branch_repository::DBCurrentBranchRepository;
+    use super::*;
     use crate::branch_fixtures::{sample_branch, sample_branch_two};
     use crate::file_shared::{clean_file, read_file_line};
-    use super::*;
+    use git_rust::domain::current_branch_repository::CurrentBranchRepository;
+    use git_rust::infrastructure::secondary::db_current_branch_repository::DBCurrentBranchRepository;
 
     #[test]
     #[should_panic(expected = "Couldn't open file")]
@@ -30,7 +30,10 @@ mod current_branch_test {
         db_repository.save(&sample_branch());
         db_repository.save(&sample_branch_two());
 
-        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "tata,2021-01-01 12:00:00");
+        assert_eq!(
+            read_file_line(TEST_DB_PATH.to_string(), 0),
+            "tata,2021-01-01 12:00:00"
+        );
 
         clean_file(TEST_DB_PATH.to_string());
     }

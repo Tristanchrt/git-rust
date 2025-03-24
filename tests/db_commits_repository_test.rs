@@ -7,11 +7,11 @@ const TEST_DB_PATH: &str = "tests/db/commits_test.txt";
 
 #[cfg(test)]
 mod commit_test {
-    use git_rust::domain::commits_repository::CommitsRepository;
-    use git_rust::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
+    use super::*;
     use crate::commit_fixtures::{sample_commit, sample_commit_three, sample_commit_two};
     use crate::file_shared::{clean_file, read_file_line};
-    use super::*;
+    use git_rust::domain::commits_repository::CommitsRepository;
+    use git_rust::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
 
     #[test]
     #[should_panic(expected = "Couldn't open file")]

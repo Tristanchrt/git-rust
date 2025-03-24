@@ -1,5 +1,5 @@
 use std::fs;
-use std::fs::{File};
+use std::fs::File;
 use std::io::BufRead;
 use std::thread::sleep;
 use std::time::Duration;

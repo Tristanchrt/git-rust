@@ -2,8 +2,8 @@ mod commit_fixtures;
 
 #[cfg(test)]
 mod cli_commit_test {
-    use git_rust::infrastructure::primary::cli_commit::{CliCommit, CliCommitToCreate, CliCommits};
     use crate::commit_fixtures::{sample_commit, sample_commit_two};
+    use git_rust::infrastructure::primary::cli_commit::{CliCommit, CliCommitToCreate, CliCommits};
 
     #[test]
     fn test_should_transform_to_domain() {

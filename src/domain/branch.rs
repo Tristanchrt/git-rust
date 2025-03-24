@@ -1,15 +1,12 @@
 use chrono::NaiveDateTime;
 
 pub struct BranchToCreate {
-    name: String
+    name: String,
 }
 
 impl BranchToCreate {
-
     pub fn new(name: String) -> BranchToCreate {
-        Self {
-            name
-        }
+        Self { name }
     }
 
     pub fn name(&self) -> String {
@@ -23,23 +20,21 @@ impl BranchToCreate {
     fn now() -> NaiveDateTime {
         NaiveDateTime::parse_from_str(
             &chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-            "%Y-%m-%d %H:%M:%S"
-        ).unwrap()
+            "%Y-%m-%d %H:%M:%S",
+        )
+        .unwrap()
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct Branch {
     name: String,
-    created_at: NaiveDateTime
+    created_at: NaiveDateTime,
 }
 
 impl Branch {
     pub fn new(name: String, created_at: NaiveDateTime) -> Branch {
-        Self {
-            name,
-            created_at
-        }
+        Self { name, created_at }
     }
 
     pub fn name(&self) -> String {

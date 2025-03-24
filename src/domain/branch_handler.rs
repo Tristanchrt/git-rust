@@ -8,12 +8,13 @@ pub struct BranchHandler {
 }
 
 impl BranchHandler {
-
-    pub fn new(branches_repository: Box<dyn BranchesRepository>,
-               current_branch_repository: Box<dyn CurrentBranchRepository>) -> Self {
+    pub fn new(
+        branches_repository: Box<dyn BranchesRepository>,
+        current_branch_repository: Box<dyn CurrentBranchRepository>,
+    ) -> Self {
         Self {
             branches_repository,
-            current_branch_repository
+            current_branch_repository,
         }
     }
 
@@ -23,7 +24,7 @@ impl BranchHandler {
             Some(value) => {
                 self.current_branch_repository.save(&value);
                 value
-            },
+            }
             None => {
                 panic!("Branch not found");
             }
@@ -31,7 +32,11 @@ impl BranchHandler {
     }
 
     pub fn create_branch(&self, branch_to_create: BranchToCreate) -> Branch {
-        if self.branches_repository.get_by_name(branch_to_create.name()).is_some() {
+        if self
+            .branches_repository
+            .get_by_name(branch_to_create.name())
+            .is_some()
+        {
             panic!("Branch name already taken");
         }
 

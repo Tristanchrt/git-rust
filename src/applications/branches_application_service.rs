@@ -4,13 +4,14 @@ use crate::domain::branches_repository::BranchesRepository;
 use crate::domain::current_branch_repository::CurrentBranchRepository;
 
 pub struct BranchesApplicationService {
-    branch_handler: BranchHandler
+    branch_handler: BranchHandler,
 }
 
 impl BranchesApplicationService {
-
-    pub fn new(branches_repository: Box<dyn BranchesRepository>,
-               current_branch_repository: Box<dyn CurrentBranchRepository>) -> Self {
+    pub fn new(
+        branches_repository: Box<dyn BranchesRepository>,
+        current_branch_repository: Box<dyn CurrentBranchRepository>,
+    ) -> Self {
         Self {
             branch_handler: BranchHandler::new(branches_repository, current_branch_repository),
         }

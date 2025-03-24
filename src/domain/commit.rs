@@ -8,9 +8,7 @@ pub struct CommitToCreate {
 
 impl CommitToCreate {
     pub fn new(message: String) -> CommitToCreate {
-        CommitToCreate {
-            message
-        }
+        CommitToCreate { message }
     }
 
     pub fn message(&self) -> &String {
@@ -29,15 +27,16 @@ impl CommitToCreate {
             parent_id,
             message: self.message.clone(),
             created_at: Self::now(),
-            branch_id
+            branch_id,
         }
     }
 
     fn now() -> NaiveDateTime {
         NaiveDateTime::parse_from_str(
             &chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-            "%Y-%m-%d %H:%M:%S"
-        ).unwrap()
+            "%Y-%m-%d %H:%M:%S",
+        )
+        .unwrap()
     }
 }
 
@@ -47,7 +46,7 @@ pub struct Commit {
     parent_id: Uuid,
     message: String,
     created_at: NaiveDateTime,
-    branch_id: String
+    branch_id: String,
 }
 
 impl PartialEq for Commit {
@@ -61,13 +60,19 @@ impl PartialEq for Commit {
 }
 
 impl Commit {
-    pub fn new(id: Uuid, parent_id: Uuid, message: String, created_at: NaiveDateTime, branch_id: String) -> Self {
+    pub fn new(
+        id: Uuid,
+        parent_id: Uuid,
+        message: String,
+        created_at: NaiveDateTime,
+        branch_id: String,
+    ) -> Self {
         Self {
             id,
             parent_id,
             message,
             created_at,
-            branch_id
+            branch_id,
         }
     }
 

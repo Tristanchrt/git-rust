@@ -1,5 +1,5 @@
-use std::env;
 use crate::infrastructure::primary::command_handler::COMMAND;
+use std::env;
 
 pub fn cli_commands() {
     let args: Vec<String> = env::args().collect();
@@ -9,7 +9,7 @@ pub fn cli_commands() {
         }
         Some(COMMAND::BRANCH(data)) => {
             println!("{:?}", data(args));
-        },
+        }
         None => {
             println!("No valid command provided");
         }
