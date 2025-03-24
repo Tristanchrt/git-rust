@@ -48,6 +48,6 @@ impl Branch {
 
 impl PartialEq for Branch {
     fn eq(&self, other: &Self) -> bool {
-        self.name == other.name && self.created_at == self.created_at
+        self.name == other.name && self.created_at == other.created_at
     }
 }

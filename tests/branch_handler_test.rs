@@ -77,7 +77,7 @@ mod branch_handler_test {
             Box::new(mock_branches_repo),
             Box::new(mock_current_branch_repo),
         );
-        let branch = branch_handler.create_branch(sample_branch_to_create());
+        let _ = branch_handler.create_branch(sample_branch_to_create());
     }
 
     #[test]
