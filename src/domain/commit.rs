@@ -40,6 +40,19 @@ impl CommitToCreate {
     }
 }
 
+// TODO add hash Tree : https://chatgpt.com/c/67e24596-7ef0-8012-80b9-745c677b5838
+// TODO 1 commit = 1 Tree and use SHA1 for Hash
+// TODO blob are just blob and tree are a metadata structure that's look like this
+// 100644 blob def4567890abcdef1234567890abcdef1234 file2.txt
+// 100644 blob ghi7894567890abcdef1234567890abcdef56 file3.txt
+// objects/
+    // ab/
+        // cdef1234567890abcdef1234567890abcdef12  # blob (file1.txt)
+        // cdef4567890abcdef1234567890abcdef1234   # blob (file2.txt)
+        // ghi7894567890abcdef1234567890abcdef56   # blob (file3.txt)
+        // 789abc1234567890abcdef1234567890abc123  # tree (subdir)
+    // 12/
+    //      34567890abcdef1234567890def456           # tree (root directory)
 #[derive(Debug, Clone)]
 pub struct Commit {
     id: Uuid,
