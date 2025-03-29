@@ -40,6 +40,10 @@ impl TreeNodeTreeHash {
     pub fn complete_hash(&self) -> String {
         format!("{}{}", self.prefix, self.hash)
     }
+
+    pub fn to_hashes(&self) -> Vec<TreeNodeTreeHash> {
+        todo!()
+    }
 }
 
 impl TreeNodeTree {
@@ -47,11 +51,10 @@ impl TreeNodeTree {
         Self { mode, filename, type_node, content, nodes }
     }
 
+    // TODO - WIP
     pub fn hash_tree(current: TreeNodeTree) -> TreeNodeTreeHash {
         if current.nodes.is_empty() {
-            let content = current.content.unwrap();
-            let hash_blob = Self::to_hash(&content);
-            TreeNodeTreeHash::new((&hash_blob[..2]).parse().unwrap(), (&hash_blob[2..]).parse().unwrap(), content, vec![])
+            Self::blob_node(current)
         }else {
             let mut nodes_hash: Vec<TreeNodeTreeHash> = vec![];
             let mut current_data: Vec<String> = vec![];
@@ -63,12 +66,18 @@ impl TreeNodeTree {
             }
 
             let final_hash = current_data.join("\n");
-            let hash_blob = Self::to_hash(&final_hash);
+            let hash_blob = Self::hash(&final_hash);
             TreeNodeTreeHash::new((&hash_blob[..2]).parse().unwrap(), (&hash_blob[2..]).parse().unwrap(), final_hash, nodes_hash)
         }
     }
 
-    fn to_hash(data: &String) -> String {
+    fn blob_node(node: TreeNodeTree) -> TreeNodeTreeHash {
+        let content = node.content.unwrap();
+        let hash_blob = Self::hash(&content);
+        TreeNodeTreeHash::new((&hash_blob[..2]).parse().unwrap(), (&hash_blob[2..]).parse().unwrap(), content, vec![])
+    }
+
+    fn hash(data: &String) -> String {
         let mut hasher = Sha1::new();
         hasher.update(data);
         let result = hasher.finalize();
