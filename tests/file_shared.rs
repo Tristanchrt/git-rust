@@ -13,6 +13,10 @@ pub fn read_file_line(path: String, index: u16) -> String {
         .unwrap()
 }
 
+pub fn read_file(path: String) -> String {
+    fs::read_to_string(path).unwrap()
+}
+
 pub fn clean_file(path: String) {
     match fs::remove_file(&path) {
         Ok(_) => println!("File deleted successfully"),

@@ -8,4 +8,4 @@ pub mod current_branch_repository;
 pub mod files_repository;
 pub mod tree;
 pub mod blob_file;
-mod tree_repository;
+pub mod tree_repository;

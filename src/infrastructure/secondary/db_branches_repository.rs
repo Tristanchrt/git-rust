@@ -25,9 +25,7 @@ impl DBBranchesRepository {
     }
 
     pub fn get_branches(&self) -> Vec<Branch> {
-        let file = std::fs::read_to_string(&self.path).unwrap();
-
-        file.lines()
+        std::fs::read_to_string(&self.path).unwrap().lines()
             .map(|line| BranchEntity::from_string(line).to_domain())
             .collect()
     }
