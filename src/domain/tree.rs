@@ -51,23 +51,26 @@ impl TreeNodeTree {
         Self { mode, filename, type_node, content, nodes }
     }
 
-    // TODO - WIP
+    // TODO - WIP : https://chatgpt.com/c/67e24596-7ef0-8012-80b9-745c677b5838
     pub fn hash_tree(current: TreeNodeTree) -> TreeNodeTreeHash {
         if current.nodes.is_empty() {
             Self::blob_node(current)
         }else {
-            let mut nodes_hash: Vec<TreeNodeTreeHash> = vec![];
-            let mut current_data: Vec<String> = vec![];
-            for node in current.nodes {
-                let n = Self::hash_tree(node.clone());
-                let content = format!("{} {} {} {}", node.mode, node.type_node.to_str(), n.complete_hash(), node.filename);
-                current_data.push(content);
-                nodes_hash.push(n);
-            }
+            let (final_hash, nodes) = current.nodes.iter()
+                .fold((String::new(), vec![]), |(mut final_hash, mut nodes), node| {
+                    let node_hashed = Self::hash_tree(node.clone());
+                    nodes.push(node_hashed.clone());
 
-            let final_hash = current_data.join("\n");
+                    if(!final_hash.is_empty()) {
+                        final_hash.push_str("\n")
+                    }
+                    final_hash.push_str(&format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename));
+
+                    (final_hash, nodes)
+                });
+
             let hash_blob = Self::hash(&final_hash);
-            TreeNodeTreeHash::new((&hash_blob[..2]).parse().unwrap(), (&hash_blob[2..]).parse().unwrap(), final_hash, nodes_hash)
+            TreeNodeTreeHash::new((&hash_blob[..2]).parse().unwrap(), (&hash_blob[2..]).parse().unwrap(), final_hash, nodes)
         }
     }
 
