@@ -47,11 +47,7 @@ impl TreeNodeTree {
         Self { mode, filename, type_node, content, nodes }
     }
 
-    pub fn hash_tree(tree: TreeNodeTree) -> TreeNodeTreeHash {
-        Self::build_hash_tree(tree)
-    }
-
-    fn build_hash_tree(current: TreeNodeTree) -> TreeNodeTreeHash {
+    pub fn hash_tree(current: TreeNodeTree) -> TreeNodeTreeHash {
         if current.nodes.is_empty() {
             let content = current.content.unwrap();
             let hash_blob = Self::to_hash(&content);
@@ -60,7 +56,7 @@ impl TreeNodeTree {
             let mut nodes_hash: Vec<TreeNodeTreeHash> = vec![];
             let mut current_data: Vec<String> = vec![];
             for node in current.nodes {
-                let n = Self::build_hash_tree(node.clone());
+                let n = Self::hash_tree(node.clone());
                 let content = format!("{} {} {} {}", node.mode, node.type_node.to_str(), n.complete_hash(), node.filename);
                 current_data.push(content);
                 nodes_hash.push(n);
