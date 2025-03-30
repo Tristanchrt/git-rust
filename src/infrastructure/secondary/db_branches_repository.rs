@@ -14,7 +14,6 @@ impl DBBranchesRepository {
 
     pub fn save_to_file(&self, branch: &Branch) {
         let mut file = OpenOptions::new()
-            
             .append(true)
             .open(&self.path)
             .expect("Couldn't open file");

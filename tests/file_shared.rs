@@ -28,3 +28,7 @@ pub fn clean_file(path: String) {
     }
     sleep(Duration::new(0, 500_000_000));
 }
+
+pub fn clean_dir(path: String) {
+    fs::remove_dir_all(path).unwrap();
+}

@@ -41,8 +41,34 @@ impl TreeNodeTreeHash {
         format!("{}{}", self.prefix, self.hash)
     }
 
-    pub fn to_hashes(&self) -> Vec<TreeNodeTreeHash> {
-        todo!()
+    pub fn flatten_nodes(&self) -> Vec<TreeNodeTreeHash> {
+        let mut total = vec![self.to_flat()];
+        total.extend(self.get_childs());
+        total
+    }
+
+    fn get_childs(&self) -> Vec<TreeNodeTreeHash> {
+        self.nodes.iter().flat_map(|node| {
+            let mut childs = vec![node.clone().to_flat()];
+            childs.extend(node.get_childs());
+            childs
+        }).collect()
+    }
+
+    pub fn to_flat(&self) -> TreeNodeTreeHash {
+        TreeNodeTreeHash::new(self.prefix(), self.hash(), self.content(), vec![])
+    }
+
+    pub fn prefix(&self) -> String {
+        self.prefix.clone()
+    }
+
+    pub fn hash(&self) -> String {
+        self.hash.clone()
+    }
+
+    pub fn content(&self) -> String {
+        self.clone().content
     }
 }
 
@@ -56,12 +82,19 @@ impl TreeNodeTree {
         if current.nodes.is_empty() {
             Self::blob_node(current)
         }else {
+            // let (final_hash, nodes): (String, Vec<TreeNodeTreeHash>) = current.nodes.iter()
+            //     .map(|node| {
+            //         let node_hashed = Self::hash_tree(node.clone());
+            //         (format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename), node)
+            //     }).collect();
+            // TODO add custom collector
+
             let (final_hash, nodes) = current.nodes.iter()
                 .fold((String::new(), vec![]), |(mut final_hash, mut nodes), node| {
                     let node_hashed = Self::hash_tree(node.clone());
                     nodes.push(node_hashed.clone());
 
-                    if(!final_hash.is_empty()) {
+                    if !final_hash.is_empty() {
                         final_hash.push_str("\n")
                     }
                     final_hash.push_str(&format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename));
