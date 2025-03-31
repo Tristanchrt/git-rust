@@ -1,4 +1,4 @@
-use std::fs::{File, OpenOptions};
+use std::fs::{File};
 use crate::domain::tree::TreeNodeTreeHash;
 use crate::domain::tree_repository::TreeRepository;
 use std::io::Write;
@@ -20,8 +20,11 @@ impl DBTreeRepository {
             std::fs::create_dir_all(path).unwrap();
 
             let file_to_save = format!("{}/{}", root, node.hash());
-            let mut file = File::create(&file_to_save).expect("Cannot create file");
-            file.write_all(node.content().as_bytes()).expect("Cannot write file");
+
+            let mut file = File::create(&file_to_save)
+                .unwrap_or_else(|error| panic!("Cannot create file {}, {}", file_to_save, error));
+            file.write_all(node.content().as_bytes())
+                .unwrap_or_else(|error| panic!("Cannot write file {}, {}", file_to_save, error))
         }
     }
 }

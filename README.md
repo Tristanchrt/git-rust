@@ -3,6 +3,9 @@
 # TODO
 
 // TODO - WIP : https://chatgpt.com/c/67e24596-7ef0-8012-80b9-745c677b5838
+- [ ] : Put HashRoot into commit as property
+- [ ] : Get commit
+- [ ] : Checkout commit / branch ?? restore file  
 
 - [ ] Implement `git checkout` and `git branch`.
 - [ ] Add git log

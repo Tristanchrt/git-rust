@@ -26,10 +26,12 @@ mock! {
 
 #[cfg(test)]
 mod branch_handler_test {
+    use chrono::NaiveDateTime;
     use crate::branch_fixtures::{sample_branch, sample_branch_to_create};
     use crate::{MockBranchesRepository, MockCurrentBranchRepository};
     use git_rust::domain::branch_handler::BranchHandler;
     use mockall::predicate::eq;
+    use git_rust::domain::branch::Branch;
 
     #[test]
     #[should_panic(expected = "Branch not found")]
@@ -86,7 +88,9 @@ mod branch_handler_test {
         mock_branches_repo
             .expect_save()
             .times(1)
-            .with(eq(sample_branch()))
+            .with(eq(
+                sample_branch_to_create().create()
+            ))
             .return_const(());
 
         mock_branches_repo
@@ -101,6 +105,7 @@ mod branch_handler_test {
             Box::new(mock_branches_repo),
             Box::new(mock_current_branch_repo),
         );
+
         let branch = branch_handler.create_branch(sample_branch_to_create());
 
         assert_eq!(branch.name(), "toto");
