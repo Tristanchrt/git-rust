@@ -77,40 +77,36 @@ impl TreeNodeTree {
         Self { mode, filename, type_node, content, nodes }
     }
 
-    // TODO - WIP : https://chatgpt.com/c/67e24596-7ef0-8012-80b9-745c677b5838
     pub fn hash_tree(current: TreeNodeTree) -> TreeNodeTreeHash {
         if current.nodes.is_empty() {
             Self::blob_node(current)
         }else {
-            // let (final_hash, nodes): (String, Vec<TreeNodeTreeHash>) = current.nodes.iter()
-            //     .map(|node| {
-            //         let node_hashed = Self::hash_tree(node.clone());
-            //         (format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename), node)
-            //     }).collect();
-            // TODO add custom collector
-
-            let (final_hash, nodes) = current.nodes.iter()
-                .fold((String::new(), vec![]), |(mut final_hash, mut nodes), node| {
-                    let node_hashed = Self::hash_tree(node.clone());
-                    nodes.push(node_hashed.clone());
-
-                    if !final_hash.is_empty() {
-                        final_hash.push_str("\n")
-                    }
-                    final_hash.push_str(&format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename));
-
-                    (final_hash, nodes)
-                });
-
-            let hash_blob = Self::hash(&final_hash);
-            TreeNodeTreeHash::new((&hash_blob[..2]).parse().unwrap(), (&hash_blob[2..]).parse().unwrap(), final_hash, nodes)
+            Self::tree_node(current)
         }
+    }
+
+    fn tree_node(current: TreeNodeTree) -> TreeNodeTreeHash {
+        let (hashes, nodes): (Vec<String>, Vec<TreeNodeTreeHash>) = current.nodes.iter()
+            .map(|node| {
+                let node_hashed = Self::hash_tree(node.clone());
+                (Self::content_file(node, &node_hashed), node_hashed)
+            }).unzip();
+
+        let final_hash = hashes.join("\n");
+        let hash_blob = Self::hash(&final_hash);
+        let (prefix, hash) = hash_blob.split_at(2);
+        TreeNodeTreeHash::new(prefix.to_string(), hash.to_string(), final_hash, nodes)
     }
 
     fn blob_node(node: TreeNodeTree) -> TreeNodeTreeHash {
         let content = node.content.unwrap();
         let hash_blob = Self::hash(&content);
-        TreeNodeTreeHash::new((&hash_blob[..2]).parse().unwrap(), (&hash_blob[2..]).parse().unwrap(), content, vec![])
+        let (prefix, hash) = hash_blob.split_at(2);
+        TreeNodeTreeHash::new(prefix.to_string(), hash.to_string(), content, vec![])
+    }
+
+    fn content_file(node: &TreeNodeTree, node_hashed: &TreeNodeTreeHash) -> String {
+        format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename)
     }
 
     fn hash(data: &String) -> String {
