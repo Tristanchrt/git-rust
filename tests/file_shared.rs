@@ -26,7 +26,7 @@ pub fn clean_file(path: String) {
         Ok(_) => println!("File created successfully"),
         Err(e) => println!("Failed to create file: {}", e),
     }
-    sleep(Duration::new(0, 500_000_000));
+    sleep(Duration::new(0, 250_000_000));
 }
 
 pub fn clean_dir(path: String) {

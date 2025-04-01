@@ -11,7 +11,7 @@ run:
 	$(CARGO) run
 
 test:
-	$(CARGO) test
+	$(CARGO) test -- --test-threads=1
 
 lint:
 	$(CLIPPY)
