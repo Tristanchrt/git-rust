@@ -1,6 +1,6 @@
 use sha1::{Digest, Sha1};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum TreeNodeType {
     BLOB,
     TREE,
@@ -15,7 +15,7 @@ impl TreeNodeType {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct TreeNodeTree {
     mode: String,
     filename: String,

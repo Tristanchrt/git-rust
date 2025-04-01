@@ -1,5 +1,5 @@
-use uuid::Uuid;
+use crate::domain::tree::TreeNodeTree;
 
 pub trait FilesRepository {
-    fn save(&self, branch_id: String, commit_id: Uuid);
+    fn get_current_state(&self) -> TreeNodeTree;
 }

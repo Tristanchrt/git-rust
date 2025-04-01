@@ -1,5 +1,5 @@
-use uuid::Uuid;
 use crate::domain::files_repository::FilesRepository;
+use crate::domain::tree::TreeNodeTree;
 
 pub struct DBFilesRepository {
     path: String,
@@ -10,13 +10,13 @@ impl DBFilesRepository {
         Self { path }
     }
 
-    pub fn save_tree_files(&self, branch: String, commit:  Uuid) {
+    pub fn get_state(&self)-> TreeNodeTree {
         todo!()
     }
 }
 
 impl FilesRepository for DBFilesRepository {
-    fn save(&self, branch_id: String, commit_id: Uuid) {
-        self.save_tree_files(branch_id, commit_id)
+    fn get_current_state(&self) -> TreeNodeTree {
+        self.get_state()
     }
 }

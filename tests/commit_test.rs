@@ -11,6 +11,7 @@ mod commit_test {
         let commit = commit_to_create.create(
             Uuid::parse_str("936da01f-9abd-4d9d-80c7-02af85c822a7").unwrap(),
             "toto".to_string(),
+            "toto".to_string(),
         );
 
         assert_eq!(commit.message(), "Init commit");

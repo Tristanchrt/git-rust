@@ -1,20 +1,24 @@
 use crate::domain::commit::{Commit, CommitToCreate};
 use crate::domain::commits_repository::CommitsRepository;
 use crate::domain::current_branch_repository::CurrentBranchRepository;
+use crate::domain::tree_repository::TreeRepository;
 
 pub struct CommitHandler {
     commit_repository: Box<dyn CommitsRepository>,
     current_branch_repository: Box<dyn CurrentBranchRepository>,
+    tree_repository: Box<dyn TreeRepository>
 }
 
 impl CommitHandler {
     pub fn new(
         commit_repository: Box<dyn CommitsRepository>,
         current_branch_repository: Box<dyn CurrentBranchRepository>,
+        tree_repository: Box<dyn TreeRepository>
     ) -> Self {
         Self {
             commit_repository,
             current_branch_repository,
+            tree_repository
         }
     }
 
@@ -30,7 +34,8 @@ impl CommitHandler {
             .map(|commit| commit.id().to_owned())
             .unwrap_or_else(CommitToCreate::default_parent_id);
 
-        let commit = to_create.create(parent_commit_id, branch.name());
+        // TODO
+        let commit = to_create.create(parent_commit_id, branch.name(), "toto".to_string());
         self.commit_repository.save(&commit);
 
         commit

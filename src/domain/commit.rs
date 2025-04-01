@@ -21,13 +21,14 @@ impl CommitToCreate {
 }
 
 impl CommitToCreate {
-    pub fn create(&self, parent_id: Uuid, branch_id: String) -> Commit {
+    pub fn create(&self, parent_id: Uuid, branch_id: String, tree_hash: String) -> Commit {
         Commit {
             id: Uuid::new_v4(),
             parent_id,
             message: self.message.clone(),
             created_at: Self::now(),
             branch_id,
+            tree_hash
         }
     }
 
@@ -40,19 +41,6 @@ impl CommitToCreate {
     }
 }
 
-// TODO add hash Tree : https://chatgpt.com/c/67e24596-7ef0-8012-80b9-745c677b5838
-// TODO 1 commit = 1 Tree and use SHA1 for Hash
-// TODO blob are just blob and tree are a metadata structure that's look like this
-// 100644 blob def4567890abcdef1234567890abcdef1234 file2.txt
-// 100644 blob ghi7894567890abcdef1234567890abcdef56 file3.txt
-// objects/
-    // ab/
-        // cdef1234567890abcdef1234567890abcdef12  # blob (file1.txt)
-        // cdef4567890abcdef1234567890abcdef1234   # blob (file2.txt)
-        // ghi7894567890abcdef1234567890abcdef56   # blob (file3.txt)
-        // 789abc1234567890abcdef1234567890abc123  # tree (subdir)
-    // 12/
-    //      34567890abcdef1234567890def456           # tree (root directory)
 #[derive(Debug, Clone)]
 pub struct Commit {
     id: Uuid,
@@ -60,6 +48,7 @@ pub struct Commit {
     message: String,
     created_at: NaiveDateTime,
     branch_id: String,
+    tree_hash: String
 }
 
 impl PartialEq for Commit {
@@ -69,6 +58,7 @@ impl PartialEq for Commit {
             && self.created_at == other.created_at
             && self.message == other.message
             && self.branch_id == other.branch_id
+            && self.tree_hash == other.tree_hash
     }
 }
 
@@ -79,6 +69,7 @@ impl Commit {
         message: String,
         created_at: NaiveDateTime,
         branch_id: String,
+        tree_hash: String
     ) -> Self {
         Self {
             id,
@@ -86,6 +77,7 @@ impl Commit {
             message,
             created_at,
             branch_id,
+            tree_hash
         }
     }
 
@@ -107,5 +99,9 @@ impl Commit {
 
     pub fn branch_id(&self) -> &String {
         &self.branch_id
+    }
+
+    pub  fn tree_hash(&self) -> &String {
+        &self.tree_hash
     }
 }

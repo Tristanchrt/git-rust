@@ -9,3 +9,4 @@ pub mod files_repository;
 pub mod tree;
 pub mod blob_file;
 pub mod tree_repository;
+mod tree_handler;

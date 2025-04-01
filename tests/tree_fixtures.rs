@@ -1,4 +1,5 @@
-use git_rust::domain::tree::TreeNodeTreeHash;
+use git_rust::domain::tree::{TreeNodeTree, TreeNodeTreeHash, TreeNodeType};
+use git_rust::domain::tree::TreeNodeType::TREE;
 
 pub fn root_hash() -> TreeNodeTreeHash {
     TreeNodeTreeHash::new("2b".to_string(), "903ff50c055a7e06a7bb5de7210eb5d691b38d".to_string(), content_hash_root(), vec![subdir_hash(), file1_hash()])
@@ -26,4 +27,24 @@ pub fn content_hash_sub_dir() -> String {
 
 pub fn content_hash_root() -> String {
     "100755 tree 96764a513c0973ec5f6737a5bcdb5f95c30006f9 subdir\n100755 blob da4e04a1877a7b6a5363ed4fc407a3885010c4de file1.txt".to_string()
+}
+
+pub fn file3() -> TreeNodeTree {
+    TreeNodeTree::new("100644".to_string(), "subdir/file3.txt".to_string(), TreeNodeType::BLOB, Some("I'm the sub file 3".to_string()), vec![])
+}
+
+pub fn file2() -> TreeNodeTree {
+    TreeNodeTree::new("100644".to_string(), "subdir/file2.txt".to_string(), TreeNodeType::BLOB, Some("I'm the sub file 2".to_string()), vec![])
+}
+
+pub fn file1() -> TreeNodeTree {
+    TreeNodeTree::new("100755".to_string(), "file1.txt".to_string(), TreeNodeType::BLOB, Some("I'm the file 1".to_string()), vec![])
+}
+
+pub fn sub_dir() -> TreeNodeTree {
+    TreeNodeTree::new("100755".to_string(), "subdir".to_string(), TreeNodeType::TREE, None, vec![file2(), file3()])
+}
+
+pub fn tree_root() -> TreeNodeTree  {
+    TreeNodeTree::new("100644".to_string(), "git-rust-data".to_string(), TreeNodeType::TREE, None, vec![sub_dir(), file1()])
 }

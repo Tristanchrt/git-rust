@@ -31,6 +31,4 @@ mod db_tree_repository_test {
 
         clean_dir(TEST_DB_PATH.to_string())
     }
-
-    // TODO add panic test
 }

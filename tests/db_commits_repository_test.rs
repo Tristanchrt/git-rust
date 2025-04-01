@@ -30,7 +30,7 @@ mod commit_test {
         let commit = sample_commit();
         db_repository.save(&commit);
 
-        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00,toto");
+        assert_eq!(read_file_line(TEST_DB_PATH.to_string(), 0), "936da01f-9abd-4d9d-80c7-02af85c822a8,936da01f-9abd-4d9d-80c7-02af85c822a7,Init commit,2023-01-01 12:00:00,toto,toto");
     }
 
     #[test]

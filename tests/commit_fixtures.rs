@@ -9,6 +9,7 @@ pub fn sample_commit() -> Commit {
         "Init commit".to_string(),
         NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap(),
         "toto".to_string(),
+        "toto".to_string()
     )
 }
 
@@ -19,6 +20,7 @@ pub fn sample_commit_two() -> Commit {
         "Commit Two".to_string(),
         NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap(),
         "toto".to_string(),
+        "toto".to_string()
     )
 }
 
@@ -29,6 +31,7 @@ pub fn sample_commit_three() -> Commit {
         "Init commit".to_string(),
         NaiveDateTime::parse_from_str("2023-01-01 12:00:00", "%Y-%m-%d %H:%M:%S").unwrap(),
         "dev".to_string(),
+        "toto".to_string()
     )
 }
 
