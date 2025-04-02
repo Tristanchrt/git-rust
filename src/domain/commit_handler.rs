@@ -1,29 +1,24 @@
 use crate::domain::commit::{Commit, CommitToCreate};
 use crate::domain::commits_repository::CommitsRepository;
 use crate::domain::current_branch_repository::CurrentBranchRepository;
-use crate::domain::files_repository::FilesRepository;
-use crate::domain::tree::TreeNodeTree;
-use crate::domain::tree_repository::TreeRepository;
+use crate::domain::tree_handler::TreeHandler;
 
 pub struct CommitHandler {
     commit_repository: Box<dyn CommitsRepository>,
     current_branch_repository: Box<dyn CurrentBranchRepository>,
-    files_repository: Box<dyn FilesRepository>,
-    tree_repository: Box<dyn TreeRepository>
+    tree_handler: TreeHandler
 }
 
 impl CommitHandler {
     pub fn new(
         commit_repository: Box<dyn CommitsRepository>,
         current_branch_repository: Box<dyn CurrentBranchRepository>,
-        files_repository: Box<dyn FilesRepository>,
-        tree_repository: Box<dyn TreeRepository>
+        tree_handler: TreeHandler,
     ) -> Self {
         Self {
             commit_repository,
             current_branch_repository,
-            files_repository,
-            tree_repository
+            tree_handler
         }
     }
 
@@ -39,12 +34,9 @@ impl CommitHandler {
             .map(|commit| commit.id().to_owned())
             .unwrap_or_else(CommitToCreate::default_parent_id);
 
-        // TODO split
-        let tree_node = self.files_repository.get_current_state();
-        let tree_hash = TreeNodeTree::hash_tree(tree_node);
+        let tree_hash = self.tree_handler.save_hash_tree();
         let commit = to_create.create(parent_commit_id, branch.name(), tree_hash.complete_hash());
         self.commit_repository.save(&commit);
-        self.tree_repository.save(tree_hash);
 
         commit
     }

@@ -12,7 +12,7 @@ impl DBTreeRepository {
         Self { path }
     }
 
-    pub fn save(&self, tree: TreeNodeTreeHash) {
+    pub fn save(&self, tree: &TreeNodeTreeHash) {
         for node in tree.flatten_nodes() {
 
             let root = format!("{}/{}/", self.path, node.prefix());
@@ -30,7 +30,7 @@ impl DBTreeRepository {
 }
 
 impl TreeRepository for DBTreeRepository {
-    fn save(&self, tree: TreeNodeTreeHash) {
+    fn save(&self, tree: &TreeNodeTreeHash) {
         self.save(tree)
     }
 }

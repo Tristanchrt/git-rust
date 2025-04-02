@@ -3,6 +3,7 @@ use crate::domain::commit_handler::CommitHandler;
 use crate::domain::commits_repository::CommitsRepository;
 use crate::domain::current_branch_repository::CurrentBranchRepository;
 use crate::domain::files_repository::FilesRepository;
+use crate::domain::tree_handler::TreeHandler;
 use crate::domain::tree_repository::TreeRepository;
 
 pub struct CommitsApplicationService {
@@ -17,7 +18,7 @@ impl CommitsApplicationService {
         tree_repository: Box<dyn TreeRepository>
     ) -> Self {
         Self {
-            commit_handler: CommitHandler::new(commit_repository, current_branch_repository, files_repository, tree_repository),
+            commit_handler: CommitHandler::new(commit_repository, current_branch_repository, TreeHandler::new(tree_repository, files_repository)),
         }
     }
 
