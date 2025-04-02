@@ -2,7 +2,7 @@ use std::fs;
 use std::fs::{DirEntry, ReadDir};
 use std::os::unix::fs::PermissionsExt;
 use crate::domain::files_repository::FilesRepository;
-use crate::domain::tree::{TreeNodeTree, TreeNodeTreeHash, TreeNodeType};
+use crate::domain::tree::{TreeNodeTree, TreeNodeType};
 
 pub struct DBFilesRepository {
     path: String,
@@ -24,11 +24,10 @@ impl DBFilesRepository {
         for entry in paths {
             if let Ok(path) = entry {
                 let node_type = Self::tree_node_type(&path);
-                println!("{:?}", &path);
                 match node_type {
                     TreeNodeType::BLOB => files.push(Self::to_tree_node_file(&path, node_type, current.clone())),
                     TreeNodeType::TREE => {
-                        let file = format!("{}/{}", current.clone(), &path.file_name().into_string().unwrap());
+                        let file = format!("{}/{}", current.clone(), Self::get_file_name(&path));
                         files.push(Self::to_tree_node(fs::read_dir(&file).unwrap(), file))
                     }
                 }
@@ -40,7 +39,8 @@ impl DBFilesRepository {
     }
 
     fn to_tree_node_file(path: &DirEntry, node_type: TreeNodeType, root_path: String) -> TreeNodeTree {
-        TreeNodeTree::new(Self::get_mode_file(&path), Self::get_file_name(&path), node_type, Some(Self::get_file_content(&path, root_path)), vec![])
+        let file = format!("{}/{}", root_path.clone(), Self::get_file_name(&path));
+        TreeNodeTree::new(Self::get_mode_file(&path), file, node_type, Some(Self::get_file_content(&path, root_path)), vec![])
     }
 
     fn tree_node_type(path: &DirEntry) -> TreeNodeType {

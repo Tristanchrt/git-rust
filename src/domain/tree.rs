@@ -78,10 +78,10 @@ impl TreeNodeTree {
     }
 
     pub fn hash_tree(current: TreeNodeTree) -> TreeNodeTreeHash {
-        if current.nodes.is_empty() {
-            Self::blob_node(current)
-        }else {
+        if !current.nodes.is_empty() {
             Self::tree_node(current)
+        } else {
+            Self::blob_node(current)
         }
     }
 

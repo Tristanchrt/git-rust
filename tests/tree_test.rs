@@ -14,10 +14,10 @@ mod cli_branch_test {
     fn test_should_transform_hash_tree_to_hashes() {
         let hashes = vec![
             root_hash().to_flat(),
+            file1_hash().to_flat(),
             subdir_hash().to_flat(),
             file2_hash().to_flat(),
             file3_hash().to_flat(),
-            file1_hash().to_flat(),
         ];
         assert_eq!(root_hash().flatten_nodes(), hashes);
     }
