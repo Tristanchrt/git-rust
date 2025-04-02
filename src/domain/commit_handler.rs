@@ -39,6 +39,7 @@ impl CommitHandler {
             .map(|commit| commit.id().to_owned())
             .unwrap_or_else(CommitToCreate::default_parent_id);
 
+        // TODO split
         let tree_node = self.files_repository.get_current_state();
         let tree_hash = TreeNodeTree::hash_tree(tree_node);
         let commit = to_create.create(parent_commit_id, branch.name(), tree_hash.complete_hash());

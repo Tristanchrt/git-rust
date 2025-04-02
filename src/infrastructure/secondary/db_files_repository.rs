@@ -19,6 +19,7 @@ impl DBFilesRepository {
         Self::to_tree_node(paths, self.path.clone())
     }
 
+    // TODO refactor
     fn to_tree_node(paths: ReadDir, current: String) -> TreeNodeTree {
         let mut files: Vec<TreeNodeTree> = Vec::new();
         for entry in paths {
