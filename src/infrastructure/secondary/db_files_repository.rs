@@ -21,17 +21,20 @@ impl DBFilesRepository {
 
     fn to_tree_node(paths: ReadDir, current_file: String) -> TreeNodeTree {
         let files = paths.map(|entry| {
-            Self::to_tree_node_tree(&current_file, &entry.unwrap())
+            Self::create_tree_node(&current_file, &entry.unwrap())
         }).collect();
 
-        let file = fs::metadata(current_file.clone()).unwrap();
-        TreeNodeTree::new(file.permissions().mode().to_string(), current_file, TreeNodeType::TREE, None, files)
+        TreeNodeTree::new(Self::get_file_metadata(&current_file), current_file, TreeNodeType::TREE, None, files)
     }
 
-    fn to_tree_node_tree(current: &String, path: &DirEntry) -> TreeNodeTree {
+    fn get_file_metadata(file: &String) -> String {
+        fs::metadata(file).unwrap().permissions().mode().to_string()
+    }
+
+    fn create_tree_node(current: &String, path: &DirEntry) -> TreeNodeTree {
         let node_type = Self::tree_node_type(&path);
         match node_type {
-            TreeNodeType::BLOB => Self::to_tree_node_file(&path, node_type, current.clone()),
+            TreeNodeType::BLOB => Self::to_tree_node_file(&path, current.clone()),
             TreeNodeType::TREE => {
                 let file = format!("{}/{}", current.clone(), Self::get_file_name(&path));
                 Self::to_tree_node(fs::read_dir(&file).unwrap(), file)
@@ -39,9 +42,9 @@ impl DBFilesRepository {
         }
     }
 
-    fn to_tree_node_file(path: &DirEntry, node_type: TreeNodeType, root_path: String) -> TreeNodeTree {
+    fn to_tree_node_file(path: &DirEntry,  root_path: String) -> TreeNodeTree {
         let file = format!("{}/{}", root_path.clone(), Self::get_file_name(&path));
-        TreeNodeTree::new(Self::get_mode_file(&path), file, node_type, Some(Self::get_file_content(&path, root_path)), vec![])
+        TreeNodeTree::new(Self::get_mode_file(&path), file, TreeNodeType::BLOB, Some(Self::get_file_content(&path, root_path)), vec![])
     }
 
     fn tree_node_type(path: &DirEntry) -> TreeNodeType {
