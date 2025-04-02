@@ -12,6 +12,7 @@ pub struct CliCommit {
     message: String,
     created_at: NaiveDateTime,
     branch_id: String,
+    tree_hash: String
 }
 
 pub struct CliCommits {
@@ -26,13 +27,14 @@ impl CliCommit {
             message: commit.message().clone(),
             created_at: commit.created_at(),
             branch_id: commit.branch_id().clone(),
+            tree_hash: commit.tree_hash().clone()
         }
     }
 
     pub fn to_display(&self) -> String {
         format!(
-            "{} | {} | {} | {} | {}",
-            self.id, self.parent_id, self.created_at, self.message, self.branch_id
+            "{} | {} | {} | {} | {} | {}",
+            self.id, self.parent_id, self.created_at, self.message, self.branch_id, self.tree_hash
         )
     }
 }

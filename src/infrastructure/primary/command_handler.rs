@@ -6,6 +6,7 @@ use crate::infrastructure::primary::cli_commit::{CliCommit, CliCommitToCreate, C
 use crate::infrastructure::secondary::db_branches_repository::DBBranchesRepository;
 use crate::infrastructure::secondary::db_commits_repository::DBCommitsRepository;
 use crate::infrastructure::secondary::db_current_branch_repository::DBCurrentBranchRepository;
+use crate::infrastructure::secondary::db_files_repository::DBFilesRepository;
 use crate::infrastructure::secondary::db_tree_repository::DBTreeRepository;
 
 pub type ArgsCLI = Vec<String>;
@@ -33,11 +34,14 @@ impl COMMAND {
             let current_branch_repo = Box::new(DBCurrentBranchRepository::new(
                 "db/current_branch.txt".to_string(),
             ));
+            let files_repository = Box::new(DBFilesRepository::new(
+                "git-rust-data".to_string()
+            ));
             let tree_repository = Box::new(DBTreeRepository::new(
                 "objects/".to_string()
             ));
 
-            let service = CommitsApplicationService::new(commit_repo, current_branch_repo, tree_repository);
+            let service = CommitsApplicationService::new(commit_repo, current_branch_repo, files_repository, tree_repository);
 
             if args.len() < 3 {
                 return "No command provided".to_string();

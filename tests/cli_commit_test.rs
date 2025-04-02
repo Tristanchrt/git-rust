@@ -16,12 +16,12 @@ mod cli_commit_test {
     fn test_should_display_cli_commit() {
         let commit = sample_commit();
         let cli_commit = CliCommit::from(&commit);
-        assert_eq!(cli_commit.to_display(), "936da01f-9abd-4d9d-80c7-02af85c822a8 | 936da01f-9abd-4d9d-80c7-02af85c822a7 | 2023-01-01 12:00:00 | Init commit | toto");
+        assert_eq!(cli_commit.to_display(), "936da01f-9abd-4d9d-80c7-02af85c822a8 | 936da01f-9abd-4d9d-80c7-02af85c822a7 | 2023-01-01 12:00:00 | Init commit | toto | toto");
     }
 
     #[test]
     fn test_should_display_cli_commits() {
         let cli_commit = CliCommits::from(vec![sample_commit(), sample_commit_two()]);
-        assert_eq!(cli_commit.to_display(), "936da01f-9abd-4d9d-80c7-02af85c822a8 | 936da01f-9abd-4d9d-80c7-02af85c822a7 | 2023-01-01 12:00:00 | Init commit | toto\n 936da01f-9abd-4d9d-80c7-02af85c822a9 | 936da01f-9abd-4d9d-80c7-02af85c82210 | 2023-01-01 12:00:00 | Commit Two | toto");
+        assert_eq!(cli_commit.to_display(), "936da01f-9abd-4d9d-80c7-02af85c822a8 | 936da01f-9abd-4d9d-80c7-02af85c822a7 | 2023-01-01 12:00:00 | Init commit | toto | toto\n 936da01f-9abd-4d9d-80c7-02af85c822a9 | 936da01f-9abd-4d9d-80c7-02af85c82210 | 2023-01-01 12:00:00 | Commit Two | toto | toto");
     }
 }

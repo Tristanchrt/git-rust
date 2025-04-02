@@ -40,6 +40,7 @@ mod git_rust_steps_test {
                 String::from_utf8_lossy(&output.stdout).contains("I'm a new Commit for feat/toto")
             );
             assert!(String::from_utf8_lossy(&output.stdout).contains("feat/toto"));
+            assert!(String::from_utf8_lossy(&output.stdout).contains("2c4ea59772b27a19096a75a37d6b34c70e486894"));
         }
 
         #[test]
