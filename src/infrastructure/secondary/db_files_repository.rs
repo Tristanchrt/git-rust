@@ -1,5 +1,8 @@
+use std::fs;
+use std::fs::{DirEntry, ReadDir};
+use std::os::unix::fs::PermissionsExt;
 use crate::domain::files_repository::FilesRepository;
-use crate::domain::tree::TreeNodeTree;
+use crate::domain::tree::{TreeNodeTree, TreeNodeTreeHash, TreeNodeType};
 
 pub struct DBFilesRepository {
     path: String,
@@ -11,7 +14,53 @@ impl DBFilesRepository {
     }
 
     pub fn get_state(&self)-> TreeNodeTree {
-        todo!()
+        let paths = fs::read_dir(&self.path).unwrap();
+
+        Self::to_tree_node(paths, self.path.clone())
+    }
+
+    fn to_tree_node(paths: ReadDir, current: String) -> TreeNodeTree {
+        let mut files: Vec<TreeNodeTree> = Vec::new();
+        for entry in paths {
+            if let Ok(path) = entry {
+                let node_type = Self::tree_node_type(&path);
+                println!("{:?}", &path);
+                match node_type {
+                    TreeNodeType::BLOB => files.push(Self::to_tree_node_file(&path, node_type, current.clone())),
+                    TreeNodeType::TREE => {
+                        let file = format!("{}/{}", current.clone(), &path.file_name().into_string().unwrap());
+                        files.push(Self::to_tree_node(fs::read_dir(&file).unwrap(), file))
+                    }
+                }
+            }
+        }
+
+        let file = fs::metadata(current.clone()).unwrap();
+        TreeNodeTree::new(file.permissions().mode().to_string(), current, TreeNodeType::TREE, None, files)
+    }
+
+    fn to_tree_node_file(path: &DirEntry, node_type: TreeNodeType, root_path: String) -> TreeNodeTree {
+        TreeNodeTree::new(Self::get_mode_file(&path), Self::get_file_name(&path), node_type, Some(Self::get_file_content(&path, root_path)), vec![])
+    }
+
+    fn tree_node_type(path: &DirEntry) -> TreeNodeType {
+        if path.metadata().unwrap().file_type().is_file() {
+            TreeNodeType::BLOB
+        }else {
+            TreeNodeType::TREE
+        }
+    }
+
+    fn get_mode_file(path: &DirEntry) -> String {
+        path.metadata().unwrap().permissions().mode().to_string()
+    }
+
+    fn get_file_name(path: &DirEntry) -> String {
+        path.file_name().into_string().unwrap()
+    }
+
+    fn get_file_content(path: &DirEntry, root_path: String) -> String {
+        fs::read_to_string(format!("{}/{}", root_path, path.file_name().into_string().unwrap())).expect("Unable to read file")
     }
 }
 
