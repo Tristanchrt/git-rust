@@ -19,24 +19,24 @@ impl DBFilesRepository {
         Self::to_tree_node(paths, self.path.clone())
     }
 
-    // TODO refactor
-    fn to_tree_node(paths: ReadDir, current: String) -> TreeNodeTree {
-        let mut files: Vec<TreeNodeTree> = Vec::new();
-        for entry in paths {
-            if let Ok(path) = entry {
-                let node_type = Self::tree_node_type(&path);
-                match node_type {
-                    TreeNodeType::BLOB => files.push(Self::to_tree_node_file(&path, node_type, current.clone())),
-                    TreeNodeType::TREE => {
-                        let file = format!("{}/{}", current.clone(), Self::get_file_name(&path));
-                        files.push(Self::to_tree_node(fs::read_dir(&file).unwrap(), file))
-                    }
-                }
+    fn to_tree_node(paths: ReadDir, current_file: String) -> TreeNodeTree {
+        let files = paths.map(|entry| {
+            Self::to_tree_node_tree(&current_file, &entry.unwrap())
+        }).collect();
+
+        let file = fs::metadata(current_file.clone()).unwrap();
+        TreeNodeTree::new(file.permissions().mode().to_string(), current_file, TreeNodeType::TREE, None, files)
+    }
+
+    fn to_tree_node_tree(current: &String, path: &DirEntry) -> TreeNodeTree {
+        let node_type = Self::tree_node_type(&path);
+        match node_type {
+            TreeNodeType::BLOB => Self::to_tree_node_file(&path, node_type, current.clone()),
+            TreeNodeType::TREE => {
+                let file = format!("{}/{}", current.clone(), Self::get_file_name(&path));
+                Self::to_tree_node(fs::read_dir(&file).unwrap(), file)
             }
         }
-
-        let file = fs::metadata(current.clone()).unwrap();
-        TreeNodeTree::new(file.permissions().mode().to_string(), current, TreeNodeType::TREE, None, files)
     }
 
     fn to_tree_node_file(path: &DirEntry, node_type: TreeNodeType, root_path: String) -> TreeNodeTree {
@@ -57,7 +57,7 @@ impl DBFilesRepository {
     }
 
     fn get_file_name(path: &DirEntry) -> String {
-        path.file_name().into_string().unwrap()
+        path.file_name().into_string().expect("Cannot convert file name into string")
     }
 
     fn get_file_content(path: &DirEntry, root_path: String) -> String {

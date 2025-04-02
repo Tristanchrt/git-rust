@@ -37,7 +37,7 @@ impl TreeNodeTreeHash {
         Self { prefix, hash, content, nodes }
     }
 
-    pub fn complete_hash(&self) -> String {
+pub fn complete_hash(&self) -> String {
         format!("{}{}", self.prefix, self.hash)
     }
 
