@@ -21,16 +21,16 @@ impl DBFilesRepository {
 
     fn to_tree_node(paths: ReadDir, current_file: &String) -> TreeNodeTree {
         let files = paths.map(|entry| {
-            Self::create_tree_node(&entry.unwrap(), &current_file)
+            Self::create_tree_node(&entry.unwrap(), current_file)
         }).collect();
 
-        TreeNodeTree::new(Self::get_file_permissions(&current_file), current_file.to_string(), TreeNodeType::TREE, None, files)
+        TreeNodeTree::new(Self::get_file_permissions(current_file), current_file.to_string(), TreeNodeType::TREE, None, files)
     }
 
     fn create_tree_node(path: &DirEntry, current: &String) -> TreeNodeTree {
-        let file_name = format!("{}/{}", current, Self::get_file_name(&path));
+        let file_name = format!("{}/{}", current, Self::get_file_name(path));
 
-        let node_type = Self::tree_node_type(&path);
+        let node_type = Self::tree_node_type(path);
         match node_type {
             TreeNodeType::BLOB => Self::to_tree_node_file(&file_name),
             TreeNodeType::TREE => {
@@ -40,7 +40,7 @@ impl DBFilesRepository {
     }
 
     fn to_tree_node_file(file: &String) -> TreeNodeTree {
-        TreeNodeTree::new(Self::get_file_permissions(&file), file.to_string(), TreeNodeType::BLOB, Some(Self::get_file_content(&file)), vec![])
+        TreeNodeTree::new(Self::get_file_permissions(file), file.to_string(), TreeNodeType::BLOB, Some(Self::get_file_content(file)), vec![])
     }
 
     fn get_file_permissions(file: &String) -> String {
