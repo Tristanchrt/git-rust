@@ -21,30 +21,30 @@ impl DBFilesRepository {
 
     fn to_tree_node(paths: ReadDir, current_file: String) -> TreeNodeTree {
         let files = paths.map(|entry| {
-            Self::create_tree_node(&current_file, &entry.unwrap())
+            Self::create_tree_node(&entry.unwrap(), &current_file)
         }).collect();
 
-        TreeNodeTree::new(Self::get_file_metadata(&current_file), current_file, TreeNodeType::TREE, None, files)
+        TreeNodeTree::new(Self::get_file_permissions(&current_file), current_file, TreeNodeType::TREE, None, files)
     }
 
-    fn get_file_metadata(file: &String) -> String {
-        fs::metadata(file).unwrap().permissions().mode().to_string()
-    }
+    fn create_tree_node(path: &DirEntry, current: &String) -> TreeNodeTree {
+        let file_name = format!("{}/{}", current.clone(), Self::get_file_name(&path));
 
-    fn create_tree_node(current: &String, path: &DirEntry) -> TreeNodeTree {
         let node_type = Self::tree_node_type(&path);
         match node_type {
-            TreeNodeType::BLOB => Self::to_tree_node_file(&path, current.clone()),
+            TreeNodeType::BLOB => Self::to_tree_node_file(&file_name),
             TreeNodeType::TREE => {
-                let file = format!("{}/{}", current.clone(), Self::get_file_name(&path));
-                Self::to_tree_node(fs::read_dir(&file).unwrap(), file)
+                Self::to_tree_node(fs::read_dir(&file_name).unwrap(), file_name)
             }
         }
     }
 
-    fn to_tree_node_file(path: &DirEntry,  root_path: String) -> TreeNodeTree {
-        let file = format!("{}/{}", root_path.clone(), Self::get_file_name(&path));
-        TreeNodeTree::new(Self::get_mode_file(&path), file, TreeNodeType::BLOB, Some(Self::get_file_content(&path, root_path)), vec![])
+    fn to_tree_node_file(file: &String) -> TreeNodeTree {
+        TreeNodeTree::new(Self::get_file_permissions(&file), file.clone(), TreeNodeType::BLOB, Some(Self::get_file_content(&file)), vec![])
+    }
+
+    fn get_file_permissions(file: &String) -> String {
+        fs::metadata(file).unwrap().permissions().mode().to_string()
     }
 
     fn tree_node_type(path: &DirEntry) -> TreeNodeType {
@@ -55,16 +55,12 @@ impl DBFilesRepository {
         }
     }
 
-    fn get_mode_file(path: &DirEntry) -> String {
-        path.metadata().unwrap().permissions().mode().to_string()
-    }
-
     fn get_file_name(path: &DirEntry) -> String {
         path.file_name().into_string().expect("Cannot convert file name into string")
     }
 
-    fn get_file_content(path: &DirEntry, root_path: String) -> String {
-        fs::read_to_string(format!("{}/{}", root_path, path.file_name().into_string().unwrap())).expect("Unable to read file")
+    fn get_file_content(file: &String) -> String {
+        fs::read_to_string(file).expect("Unable to read file")
     }
 }
 

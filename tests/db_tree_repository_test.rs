@@ -14,7 +14,7 @@ mod db_tree_repository_test {
     fn test_save_commit() {
         let db_repository = DBTreeRepository::new(TEST_DB_PATH.to_string());
 
-        db_repository.save(root_hash().clone());
+        db_repository.save(&root_hash().clone());
 
         let file3_content = read_file("tests/objects/".to_string() + &file3_hash().prefix() + "/" + &file3_hash().hash());
         let file2_content = read_file("tests/objects/".to_string() + &file2_hash().prefix() + "/" + &file2_hash().hash());

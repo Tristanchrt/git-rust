@@ -92,10 +92,15 @@ impl TreeNodeTree {
                 (Self::content_file(node, &node_hashed), node_hashed)
             }).unzip();
 
+        let (final_hash, prefix, hash) = Self::get_hash(hashes);
+        TreeNodeTreeHash::new(prefix, hash, final_hash, nodes)
+    }
+
+    fn get_hash(hashes: Vec<String>) -> (String, String, String) {
         let final_hash = hashes.join("\n");
         let hash_blob = Self::hash(&final_hash);
         let (prefix, hash) = hash_blob.split_at(2);
-        TreeNodeTreeHash::new(prefix.to_string(), hash.to_string(), final_hash, nodes)
+        (final_hash, prefix.to_string(), hash.to_string())
     }
 
     fn blob_node(node: TreeNodeTree) -> TreeNodeTreeHash {
@@ -105,15 +110,15 @@ impl TreeNodeTree {
         TreeNodeTreeHash::new(prefix.to_string(), hash.to_string(), content, vec![])
     }
 
-    fn content_file(node: &TreeNodeTree, node_hashed: &TreeNodeTreeHash) -> String {
-        format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename)
-    }
-
     fn hash(data: &String) -> String {
         let mut hasher = Sha1::new();
         hasher.update(data);
         let result = hasher.finalize();
         hex::encode(result).to_string()
+    }
+
+    fn content_file(node: &TreeNodeTree, node_hashed: &TreeNodeTreeHash) -> String {
+        format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename)
     }
 }
 
