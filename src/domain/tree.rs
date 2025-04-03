@@ -89,7 +89,7 @@ impl TreeNodeTree {
         let (hashes, nodes): (Vec<String>, Vec<TreeNodeTreeHash>) = current.nodes.iter()
             .map(|node| {
                 let node_hashed = Self::hash_tree(node.clone());
-                (Self::content_file(node, &node_hashed), node_hashed)
+                (Self::content_directory(node, &node_hashed), node_hashed)
             }).unzip();
 
         let (final_hash, prefix, hash) = Self::get_hash(hashes);
@@ -117,7 +117,7 @@ impl TreeNodeTree {
         hex::encode(result).to_string()
     }
 
-    fn content_file(node: &TreeNodeTree, node_hashed: &TreeNodeTreeHash) -> String {
+    fn content_directory(node: &TreeNodeTree, node_hashed: &TreeNodeTreeHash) -> String {
         format!("{} {} {} {}", node.mode, node.type_node.to_str(), node_hashed.complete_hash(), node.filename)
     }
 }
