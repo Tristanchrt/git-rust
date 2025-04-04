@@ -3,6 +3,8 @@ use std::fs::File;
 use std::io::BufRead;
 use std::thread::sleep;
 use std::time::Duration;
+use git_rust::settings;
+use git_rust::settings::load_settings;
 
 pub fn read_file_line(path: String, index: u16) -> String {
     File::open(path)
@@ -31,4 +33,14 @@ pub fn clean_file(path: String) {
 
 pub fn clean_dir(path: String) {
     fs::remove_dir_all(path).unwrap();
+}
+
+pub fn clean_db_test() {
+    let settings = load_settings();
+
+    clean_file(settings.db_branches);
+    clean_file(settings.db_current_branch);
+    clean_file(settings.db_commits);
+
+    sleep(Duration::new(0, 250_000_000));
 }

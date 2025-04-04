@@ -8,10 +8,10 @@ build:
 	$(CARGO) build
 
 run:
-	$(CARGO) run
+	APP_ENV=dev $(CARGO) run $(ARGS)
 
 test:
-	$(CARGO) test -- --test-threads=1
+	APP_ENV=test $(CARGO) test -- --test-threads=1
 
 lint:
 	$(CLIPPY)

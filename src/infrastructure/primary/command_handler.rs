@@ -1,3 +1,4 @@
+use std::panic::set_hook;
 use crate::applications::branches_application_service::BranchesApplicationService;
 use crate::applications::commits_application_service::CommitsApplicationService;
 use crate::domain::commits_repository::CommitsRepository;
@@ -8,6 +9,7 @@ use crate::infrastructure::secondary::db_commits_repository::DBCommitsRepository
 use crate::infrastructure::secondary::db_current_branch_repository::DBCurrentBranchRepository;
 use crate::infrastructure::secondary::db_files_repository::DBFilesRepository;
 use crate::infrastructure::secondary::db_tree_repository::DBTreeRepository;
+use crate::settings::load_settings;
 
 pub type ArgsCLI = Vec<String>;
 type CommandHandler = fn(args: ArgsCLI) -> String;
@@ -29,16 +31,18 @@ impl COMMAND {
     fn commit_commands() -> Option<COMMAND> {
         Some(COMMAND::COMMIT(|args| {
             // TODO find a better way
+            let settings = load_settings();
+
             let commit_repo: Box<dyn CommitsRepository> =
-                Box::new(DBCommitsRepository::new("db/commits.txt".to_string()));
+                Box::new(DBCommitsRepository::new(settings.db_commits));
             let current_branch_repo = Box::new(DBCurrentBranchRepository::new(
-                "db/current_branch.txt".to_string(),
+                settings.db_current_branch
             ));
             let files_repository = Box::new(DBFilesRepository::new(
-                "git-rust-data".to_string()
+                settings.files_project
             ));
             let tree_repository = Box::new(DBTreeRepository::new(
-                "objects/".to_string()
+                settings.db_tree
             ));
 
             let service = CommitsApplicationService::new(commit_repo, current_branch_repo, files_repository, tree_repository);
@@ -79,9 +83,13 @@ impl COMMAND {
     fn branch_commands() -> Option<COMMAND> {
         Some(COMMAND::BRANCH(|args| {
             // TODO
-            let branches_repo = Box::new(DBBranchesRepository::new("db/branches.txt".to_string()));
+            let settings = load_settings();
+
+            let branches_repo = Box::new(DBBranchesRepository::new(
+                settings.db_branches
+            ));
             let current_branch_repo = Box::new(DBCurrentBranchRepository::new(
-                "db/current_branch.txt".to_string(),
+               settings.db_current_branch
             ));
             let service = BranchesApplicationService::new(branches_repo, current_branch_repo);
 

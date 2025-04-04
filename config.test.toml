@@ -1,0 +1,5 @@
+db_commits = "tests/db/commits_test.txt"
+db_branches = "tests/db/branches_test.txt"
+db_current_branch = "tests/db/current_branch_test.txt"
+files_project = "tests/git-rust-data/"
+db_tree = "tests/objects/"
