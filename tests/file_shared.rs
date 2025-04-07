@@ -1,9 +1,9 @@
 use std::fs;
-use std::fs::File;
+use std::io::Write;
+use std::fs::{File, OpenOptions};
 use std::io::BufRead;
 use std::thread::sleep;
 use std::time::Duration;
-use git_rust::settings;
 use git_rust::settings::load_settings;
 
 pub fn read_file_line(path: String, index: u16) -> String {
@@ -33,6 +33,17 @@ pub fn clean_file(path: String) {
 
 pub fn clean_dir(path: String) {
     fs::remove_dir_all(path).unwrap();
+}
+
+pub fn write_in_file(path: String, content: String) {
+    let mut file = OpenOptions::new()
+        .append(false)
+        .open(path)
+        .expect("Couldn't open file");
+
+    if let Err(e) = writeln!(file, "{}", content) {
+        panic!("Couldn't save commit: {}", e);
+    }
 }
 
 pub fn clean_db_test() {

@@ -1,3 +1,4 @@
+use fs::read_to_string;
 use std::fs;
 use std::fs::{DirEntry, ReadDir};
 use std::os::unix::fs::PermissionsExt;
@@ -11,6 +12,10 @@ pub struct DBFilesRepository {
 impl DBFilesRepository {
     pub fn new(path: String) -> Self {
         Self { path }
+    }
+
+    pub fn restore_tree(&self, tree: TreeNodeTree)  {
+        todo!()
     }
 
     pub fn get_state(&self)-> TreeNodeTree {
@@ -60,12 +65,16 @@ impl DBFilesRepository {
     }
 
     fn get_file_content(file: &String) -> String {
-        fs::read_to_string(file).expect("Unable to read file")
+        read_to_string(file).expect("Unable to read file")
     }
 }
 
 impl FilesRepository for DBFilesRepository {
     fn get_current_state(&self) -> TreeNodeTree {
         self.get_state()
+    }
+
+    fn restore_tree(&self, tree: TreeNodeTree) {
+        self.restore_tree(tree)
     }
 }

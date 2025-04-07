@@ -21,4 +21,9 @@ mod cli_branch_test {
         ];
         assert_eq!(root_hash().flatten_nodes(), hashes);
     }
+
+    #[test]
+    fn test_should_transform_hash_to_tree_node() {
+        assert_eq!(root_hash().to_tree_node(), tree_root());
+    }
 }

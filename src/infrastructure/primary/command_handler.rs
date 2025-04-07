@@ -91,7 +91,17 @@ impl COMMAND {
             let current_branch_repo = Box::new(DBCurrentBranchRepository::new(
                settings.db_current_branch
             ));
-            let service = BranchesApplicationService::new(branches_repo, current_branch_repo);
+            let commit_repo: Box<dyn CommitsRepository> =
+                Box::new(DBCommitsRepository::new(settings.db_commits));
+
+            let files_repository = Box::new(DBFilesRepository::new(
+                settings.files_project
+            ));
+            let tree_repository = Box::new(DBTreeRepository::new(
+                settings.db_tree
+            ));
+
+            let service = BranchesApplicationService::new(branches_repo, current_branch_repo, commit_repo, tree_repository, files_repository);
 
             if args.len() < 3 {
                 return "No command provided".to_string();

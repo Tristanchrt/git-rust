@@ -1,3 +1,4 @@
+use crate::domain::commit::Commit;
 use crate::domain::files_repository::FilesRepository;
 use crate::domain::tree::{TreeNodeTree, TreeNodeTreeHash};
 use crate::domain::tree_repository::TreeRepository;
@@ -23,5 +24,10 @@ impl TreeHandler {
         let tree_hash = TreeNodeTree::hash_tree(tree_node);
         self.tree_repository.save(&tree_hash);
         tree_hash
+    }
+
+    pub fn restore_commit(&self, commit: Commit) {
+        let tree_node_hash = self.tree_repository.get_tree_node_hash(commit.tree_hash());
+        self.files_repository.restore_tree(tree_node_hash.to_tree_node())
     }
 }

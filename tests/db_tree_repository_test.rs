@@ -5,6 +5,7 @@ mod tree_fixtures;
 
 #[cfg(test)]
 mod db_tree_repository_test {
+    use git_rust::domain::tree_repository::TreeRepository;
     use git_rust::infrastructure::secondary::db_tree_repository::DBTreeRepository;
     use crate::file_shared::{clean_dir, read_file};
     use crate::TEST_DB_PATH;
@@ -28,6 +29,20 @@ mod db_tree_repository_test {
         assert_eq!(file2_content, file2_hash().content());
         assert_eq!(file1_content, file1_hash().content());
         assert_eq!(file1_content, file1_hash().content());
+
+        clean_dir(TEST_DB_PATH.to_string())
+    }
+
+    #[test]
+    fn test_should_get_tree() {
+        let db_repository = DBTreeRepository::new(TEST_DB_PATH.to_string());
+
+        db_repository.save(&root_hash().clone());
+
+        let tree_hash = root_hash().complete_hash();
+        let tree_node_hash = db_repository.get_tree_node_hash(&tree_hash);
+
+        assert_eq!(root_hash(), tree_node_hash);
 
         clean_dir(TEST_DB_PATH.to_string())
     }

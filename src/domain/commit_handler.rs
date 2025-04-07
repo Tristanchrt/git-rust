@@ -41,6 +41,10 @@ impl CommitHandler {
         commit
     }
 
+    pub fn restore_commit(&self, commit_to_restore: Commit) {
+        self.tree_handler.restore_commit(commit_to_restore)
+    }
+
     pub fn get_commits(&self, branch_name: String) -> Vec<Commit> {
         self.commit_repository.get_commits(branch_name)
     }
